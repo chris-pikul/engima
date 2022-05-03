@@ -1,0 +1,35 @@
+{
+  "name": "engima",
+  "version": "0.1.0",
+  "description": "Modern take on an Enigma Machine simulation for Web using TypeScript/JS",
+  "main": "./dist/index.js",
+  "repository": "git@github.com:chris-pikul/engima.git",
+  "author": "Chris Pikul <ChrisPikul510@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "private": false,
+  "scripts": {
+    "clean": "rimraf dist/**/* types/**/*",
+    "lint": "npx eslint ./src/** --ext .js,.ts",
+    "test": "cross-env TS_NODE_PROJECT='tsconfig.tests.json' mocha --r ts-node/register --extension js,ts 'test/**/*.ts'",
+    "coverage": "nyc npm run test",
+    "compile": "tsc .",
+    "build": "npm run clean && npm run lint && npm test && npm run compile",
+    "start": "npm run build"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^17.0.31",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "chai": "^4.3.6",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.14.0",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4",
+    "yarnpm": "^0.0.5"
+  }
+}
