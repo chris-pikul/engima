@@ -233,6 +233,7 @@ export class Wheel implements IEncodable, IRotatable {
    * (0-based index on the alphabet) and applying the position, ring settings,
    * and internal wiring to return a resulting character index.
    * 
+   * @implements IEncodable
    * @param index Input character index (0-based)
    * @returns New character index (0-based)
    */
@@ -244,6 +245,9 @@ export class Wheel implements IEncodable, IRotatable {
    * Rotates the wheel one position forward.
    * 
    * As the wheel is circular, this will automatically roll-over.
+   * 
+   * @implements IRotatable
+   * @param steps Number of steps or positions to rotate (default 1)
    */
   public advance(steps = 1):void {
     this.#position = Circular(this.#position + steps, this.numCharacters);
