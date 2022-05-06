@@ -225,11 +225,11 @@ export class Wheel {
    * (0-based index on the alphabet) and applying the position, ring settings,
    * and internal wiring to return a resulting character index.
    * 
-   * @param char Input character index (0-based)
+   * @param index Input character index (0-based)
    * @returns New character index (0-based)
    */
-  public encode(char:number):number {
-    return (char + this.ringSetting + this.position) % this.numCharacters;
+  public encode(index:number):number {
+    return (index + this.ringSetting + this.position) % this.numCharacters;
   }
 
   /**
