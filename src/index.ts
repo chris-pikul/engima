@@ -9,11 +9,11 @@
  * Main entry file. Responsible for re-exporting the parts of the machine
  */
 
-export * from './Machine';
-export * from './Plugboard';
-export * from './Reflector';
-export * from './Stator';
-export * from './Wheel';
+export * from './components/Machine';
+export * from './components/Plugboard';
+export * from './components/Reflector';
+export * from './components/Stator';
+export * from './components/Wheel';
 
 // Alias Machine => Enigma for ease of use
-export { default as Enigma } from './Machine';
+export { default as Enigma } from './components/Machine';
