@@ -193,9 +193,12 @@ export class Wheel {
    * 
    * Additionally, the returned string may be more than 1 character in length
    * as the displayed information is determined by the wheel model.
+   * 
+   * The physical description of wheels says that the visible character is
+   * actually 1 position ahead of the current position.
    */
   get visibleCharacter():string {
-    return this.ringDisplay[this.position];
+    return this.ringDisplay[(this.position + 1) % this.numCharacters];
   }
 
   /**
