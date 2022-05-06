@@ -10,6 +10,9 @@
  * keys, while also controlling and performing a rotation if desired.
  */
 
+import type { IEncodable } from '../interfaces/IEncodable';
+import type { IRotatable } from '../interfaces/IRotatable';
+
 /**
  * Represents the Wheel, or "Rotor" of the Enigma machine.
  * 
@@ -20,7 +23,7 @@
  * security step, the wheel may have it's "ring setting" altered at setup to
  * offset the internal alphabet wiring.
  */
-export class Wheel {
+export class Wheel implements IEncodable, IRotatable {
   /* eslint-disable array-element-newline */
   /**
    * Available display types for the "rings" of the wheel. In a physical Enigma
@@ -240,8 +243,8 @@ export class Wheel {
    * 
    * As the wheel is circular, this will automatically roll-over.
    */
-  public advance():void {
-    this.#position = (this.#position + 1) % this.numCharacters;
+  public advance(steps = 1):void {
+    this.#position = (this.#position + steps) % this.numCharacters;
   }
 }
 
