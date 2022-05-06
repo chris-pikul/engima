@@ -10,12 +10,24 @@
  * keys, while also controlling and performing a rotation if desired.
  */
 
+/**
+ * Represents the Wheel, or "Rotor" of the Enigma machine.
+ * 
+ * The wheel is responsible for performing a substitution of an incoming
+ * character into another via it's internal "wiring". In addition, the wheel may
+ * be rotated on each character entered, manually, or driven by a neighboring
+ * wheel in order to change the output character encoding. As an additional
+ * security step, the wheel may have it's "ring setting" altered at setup to
+ * offset the internal alphabet wiring.
+ */
 export class Wheel {
   /* eslint-disable array-element-newline */
   /**
-   * Ring Display settings for a numerical display.
+   * Available display types for the "rings" of the wheel. In a physical Enigma
+   * machine, these are visible through the viewing window on the top.
    * 
-   * This is present on the Enigma model I
+   * Most models of Enigma use the latin alphabet displays, with the exception
+   * of the Model I (services enigma), and the Model Z (numerical enigma).
    */
   public static readonly RingDisplays:Record<string, Array<string>> = {
     ModelI: [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26' ],
@@ -28,6 +40,13 @@ export class Wheel {
    * The displayed label or name for this wheel
    */
   readonly label:string;
+
+  /**
+   * The maximum number of characters. For the standard latin alphabet rings
+   * this value should be 26. The Funkschlüssel C has 28, and the Model Z has
+   * 10.
+   */
+  readonly numCharacters:number;
 
   /**
    * Display ring for the Wheel.
@@ -80,7 +99,7 @@ export class Wheel {
    * wheel. For instance, a value of 0 will result in the wheel being in default
    * configuration, leaving the A character in the first position.
    */
-  ringSetting:number;
+  #ringSetting:number;
 
   /**
    * The starting position (Grundstellung) for this Wheel.
@@ -88,7 +107,7 @@ export class Wheel {
    * This value is a number being the 0-index of the starting position. The
    * number maps to the character at that index. IE. 0 = A, 5 = E.
    */
-  startingPosition:number;
+  #startingPosition:number;
 
   /**
    * The current position that the wheel is in.
@@ -101,21 +120,125 @@ export class Wheel {
    */
   #position:number;
 
-  constructor(label:string, display?:Array<string>, wiring?:Array<number>, notches?:Array<number>) {
+  /**
+   * If true, the wheel has called the setup function
+   */
+  #init:boolean;
+
+  constructor(label:string, numChars:number, display?:Array<string>, wiring?:Array<number>, notches?:Array<number>) {
     // Bind methods
     this.setup = this.setup.bind(this);
+    this.encode = this.encode.bind(this);
+    this.advance = this.advance.bind(this);
 
     // Setup readonly variables
     this.label = label;
+
+    if(numChars <= 0)
+      throw new TypeError(`Wheel constructed with parameter 2 "numChars" being 0 or under. Please use a positive value.`);
+    this.numCharacters = numChars;
+
+    if(display && display.length !== numChars)
+      throw new TypeError(`Wheel constructed with an invalid "display" parameter. Expected an array equaling the "numChars" parameter in length.`);
     this.ringDisplay = display ?? Wheel.RingDisplays.Latin;
+
+    if(wiring && wiring.length !== numChars)
+      throw new TypeError(`Wheel constructed with an invalid "wiring" parameter. Expected an array equaling the "numChars" parameter in length.`);
     this.wiring = wiring ?? [];
+
     this.notches = notches ?? [];
 
     // Remaining initialization
-    this.ringSetting = 0;
-    this.startingPosition = 0;
+    this.#ringSetting = 0;
+    this.#startingPosition = 0;
 
+    this.#position = 0;
+    this.#init = false;
+  }
+
+  /**
+   * The internal ring setting (Ringstellung) applied when the wheel was setup.
+   * 
+   * @readonly
+   */
+  get ringSetting():number {
+    return this.#ringSetting;
+  }
+
+  /**
+   * The initial starting position (Grundstellung) the wheel was in when setup.
+   * 
+   * @readonly
+   */
+  get startingPosition():number {
+    return this.#startingPosition;
+  }
+
+  /**
+   * Current position the wheel is in
+   */
+  get position():number {
+    return this.#position;
+  }
+
+  /**
+   * True, if the {@link Wheel.setup()} method has been called
+   */
+  get isSetup():boolean {
+    return this.#init;
+  }
+
+  /**
+   * The current visible character in the viewport window.
+   * 
+   * Additionally, the returned string may be more than 1 character in length
+   * as the displayed information is determined by the wheel model.
+   */
+  get visibleCharacter():string {
+    return this.ringDisplay[this.position];
+  }
+
+  /**
+   * Is the wheel currently at a position in which the notch is engaged (or
+   * ready to rotate in other words)?
+   */
+  get atNotch():boolean {
+    return this.notches.includes(this.position);
+  }
+
+  /**
+   * Performs initial setup of the wheel. This method should be executed when
+   * the Enigma machine itself is preparing for work.
+   * 
+   * @param ringSetting (Ringstellung) Numerical offset for the ring
+   * @param startingPosition (Grundstellung) Numerical starting position for the
+   * wheel
+   */
+  public setup(ringSetting:number, startingPosition:number):void {
+    this.#ringSetting = ringSetting % this.numCharacters;
+    this.#startingPosition = startingPosition % this.numCharacters;
     this.#position = this.startingPosition;
+  }
+
+  /**
+   * Performs an encoding of a character by taking the input character number
+   * (0-based index on the alphabet) and applying the position, ring settings,
+   * and internal wiring to return a resulting character index.
+   * 
+   * @param char Input character index (0-based)
+   * @returns New character index (0-based)
+   */
+  public encode(char:number):number {
+    return (char + this.ringSetting + this.position) % this.numCharacters;
+  }
+
+  /**
+   * Rotates the wheel one position forward.
+   * 
+   * As the wheel is circular, this will automatically roll-over.
+   */
+  public advance():void {
+    this.#position = (this.#position + 1) % this.numCharacters;
   }
 }
 
