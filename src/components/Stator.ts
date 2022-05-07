@@ -12,8 +12,9 @@
  */
 
 import type IEncodable from '../interfaces/IEncodable';
+import type { IValidatable, OptErrors } from '../interfaces/IValidatable';
 
-import { Circular } from '../common';
+import { circular, findDuplicates } from '../common';
 
 /**
  * Represents the Stator, Entrittswalze (ETW), or entry wheel, of an Enigma 
@@ -23,7 +24,7 @@ import { Circular } from '../common';
  * machine. It's responsibility is to map the incoming keyboard (or Plugboard)
  * connections into the remaining wheels (rotors) and back out again.
  */
-export class Stator implements IEncodable {
+export class Stator implements IEncodable, IValidatable {
   /**
    * Displayable label (or name) for this Stator.
    */
@@ -61,7 +62,21 @@ export class Stator implements IEncodable {
    * @returns New character index
    */
   public encode(index:number):number {
-    return this.mapping[ Circular(index, this.numCharacters) ];
+    return this.mapping[ circular(index, this.numCharacters) ];
+  }
+
+  /**
+   * Checks that this Stator's settings are valid.
+   * 
+   * A Stator is considered invalid if any of the mappings repeat.
+   * 
+   * @returns Undefined for no errors, or an Array of error objects
+   */
+  public validate():OptErrors {
+    const dups:Array<[number, number]> = findDuplicates<number>(this.mapping);
+
+    if(dups.length)
+      return dups.map(([ ind, val ]) => new Error(`Stator.mapping[${ind}] is a duplicate value '${val}'`));
   }
 }
 export default Stator;

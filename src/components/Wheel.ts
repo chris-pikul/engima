@@ -13,7 +13,7 @@
 import type IEncodable from '../interfaces/IEncodable';
 import type IRotatable from '../interfaces/IRotatable';
 
-import { Circular } from '../common';
+import { circular } from '../common';
 
 /**
  * Represents the Wheel, or "Rotor" of the Enigma machine.
@@ -203,7 +203,7 @@ export class Wheel implements IEncodable, IRotatable {
    * actually 1 position ahead of the current position.
    */
   get visibleCharacter():string {
-    return this.ringDisplay[ Circular(this.position + 1, this.numCharacters) ];
+    return this.ringDisplay[ circular(this.position + 1, this.numCharacters) ];
   }
 
   /**
@@ -223,8 +223,8 @@ export class Wheel implements IEncodable, IRotatable {
    * wheel
    */
   public setup(ringSetting:number, startingPosition:number):void {
-    this.#ringSetting = Circular(ringSetting, this.numCharacters);
-    this.#startingPosition = Circular(startingPosition, this.numCharacters);
+    this.#ringSetting = circular(ringSetting, this.numCharacters);
+    this.#startingPosition = circular(startingPosition, this.numCharacters);
     this.#position = this.startingPosition;
   }
 
@@ -238,7 +238,7 @@ export class Wheel implements IEncodable, IRotatable {
    * @returns New character index (0-based)
    */
   public encode(index:number):number {
-    return Circular(index + this.#position + this.#ringSetting, this.numCharacters);
+    return circular(index + this.#position + this.#ringSetting, this.numCharacters);
   }
 
   /**
@@ -250,7 +250,7 @@ export class Wheel implements IEncodable, IRotatable {
    * @param steps Number of steps or positions to rotate (default 1)
    */
   public advance(steps = 1):void {
-    this.#position = Circular(this.#position + steps, this.numCharacters);
+    this.#position = circular(this.#position + steps, this.numCharacters);
   }
 }
 
