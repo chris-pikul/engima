@@ -48,7 +48,13 @@ export class Stator implements IEncodable, IValidatable {
 
     // Setup variables
     this.label = label;
+
+    if(numChars <= 0)
+      throw new TypeError(`Stator constructed with parameter 2 "numChars" being 0 or under. Please use a positive value.`);
     this.numCharacters = numChars;
+
+    if(!map || map.length !== numChars)
+      throw new TypeError(`Stator constructed with parameter 3 "map" being empty, or not of length "${numChars}" as specified by "numChars".`);
     this.mapping = map;
   }
 
