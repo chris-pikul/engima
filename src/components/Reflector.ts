@@ -94,6 +94,10 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
 
   constructor(label:string, numChars:number, wiring:Array<number>, moving = false) {
     // Bind methods
+    this.setup = this.setup.bind(this);
+    this.encode = this.encode.bind(this);
+    this.advance = this.advance.bind(this);
+    this.validate = this.validate.bind(this);
 
     // Setup readonly variables
 
