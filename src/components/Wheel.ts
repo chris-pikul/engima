@@ -12,8 +12,9 @@
 
 import type IEncodable from '../interfaces/IEncodable';
 import type IRotatable from '../interfaces/IRotatable';
+import type { IValidatable, OptErrors } from '../interfaces/IValidatable';
 
-import { circular } from '../common';
+import { circular, findDuplicates } from '../common';
 
 /**
  * Represents the Wheel, or "Rotor" of the Enigma machine.
@@ -25,7 +26,7 @@ import { circular } from '../common';
  * security step, the wheel may have it's "ring setting" altered at setup to
  * offset the internal alphabet wiring.
  */
-export class Wheel implements IEncodable, IRotatable {
+export class Wheel implements IEncodable, IRotatable, IValidatable {
   /* eslint-disable array-element-newline */
   /**
    * Available display types for the "rings" of the wheel. In a physical Enigma
@@ -135,6 +136,7 @@ export class Wheel implements IEncodable, IRotatable {
     this.setup = this.setup.bind(this);
     this.encode = this.encode.bind(this);
     this.advance = this.advance.bind(this);
+    this.validate = this.validate.bind(this);
 
     // Setup readonly variables
     if(label.length < 1)
@@ -267,6 +269,20 @@ export class Wheel implements IEncodable, IRotatable {
    */
   public advance(steps = 1):void {
     this.#position = circular(this.#position + steps, this.numCharacters);
+  }
+
+  /**
+   * Checks that this Wheel's settings are valid.
+   * 
+   * A Wheel is considered invalid if any of the wirings repeat.
+   * 
+   * @returns Undefined for no errors, or an Array of error objects
+   */
+  public validate(): OptErrors {
+    const dups:Array<[number, number]> = findDuplicates<number>(this.wiring);
+
+    if(dups.length)
+      return dups.map(([ ind, val ]) => new Error(`Wheel.wiring[${ind}] is a duplicate value '${val}'`));
   }
 }
 
