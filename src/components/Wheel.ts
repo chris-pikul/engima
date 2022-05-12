@@ -137,17 +137,21 @@ export class Wheel implements IEncodable, IRotatable {
     this.advance = this.advance.bind(this);
 
     // Setup readonly variables
+    if(label.length < 1)
+      throw new TypeError(`Wheel constructed with parameter 1 "label" being empty.`);
     this.label = label;
 
+    // TODO: Have a default numChars that matches latin alphabet (26)
     if(numChars <= 0)
       throw new TypeError(`Wheel constructed with parameter 2 "numChars" being 0 or under. Please use a positive value.`);
     this.numCharacters = numChars;
 
-    if(display && display.length !== numChars)
+    // TODO: Only use the default if numChars is NOT 26
+    if(!display || display.length !== numChars)
       throw new TypeError(`Wheel constructed with an invalid "display" parameter. Expected an array equaling the "numChars" parameter in length.`);
     this.ringDisplay = display ?? Wheel.RingDisplays.Latin;
 
-    if(wiring && wiring.length !== numChars)
+    if(!wiring || wiring.length !== numChars)
       throw new TypeError(`Wheel constructed with an invalid "wiring" parameter. Expected an array equaling the "numChars" parameter in length.`);
     this.wiring = wiring ?? [];
 
@@ -156,7 +160,6 @@ export class Wheel implements IEncodable, IRotatable {
     // Remaining initialization
     this.#ringSetting = 0;
     this.#startingPosition = 0;
-
     this.#position = 0;
     this.#init = false;
   }
@@ -187,6 +190,16 @@ export class Wheel implements IEncodable, IRotatable {
   }
 
   /**
+   * Current position the wheel is in.
+   * 
+   * Setting this variable will properly wrap the value to be within acceptable
+   * range for this wheel.
+   */
+  set position(val:number) {
+    this.#position = circular(val, this.numCharacters);
+  }
+
+  /**
    * True, if the {@link Wheel.setup()} method has been called
    */
   get isSetup():boolean {
@@ -196,7 +209,7 @@ export class Wheel implements IEncodable, IRotatable {
   /**
    * The current visible character in the viewport window.
    * 
-   * Additionally, the returned string may be more than 1 character in length
+   * Note: the returned string may be more than 1 character in length
    * as the displayed information is determined by the wheel model.
    * 
    * The physical description of wheels says that the visible character is
@@ -219,13 +232,15 @@ export class Wheel implements IEncodable, IRotatable {
    * the Enigma machine itself is preparing for work.
    * 
    * @param ringSetting (Ringstellung) Numerical offset for the ring
+   * (0-based indice)
    * @param startingPosition (Grundstellung) Numerical starting position for the
-   * wheel
+   * wheel. (0-based indice)
    */
   public setup(ringSetting:number, startingPosition:number):void {
     this.#ringSetting = circular(ringSetting, this.numCharacters);
     this.#startingPosition = circular(startingPosition, this.numCharacters);
     this.#position = this.startingPosition;
+    this.#init = true;
   }
 
   /**
@@ -238,7 +253,8 @@ export class Wheel implements IEncodable, IRotatable {
    * @returns New character index (0-based)
    */
   public encode(index:number):number {
-    return circular(index + this.#position + this.#ringSetting, this.numCharacters);
+    // TODO: Throw warning if !init?
+    return this.wiring[circular(index + this.#position + this.#ringSetting, this.numCharacters)];
   }
 
   /**
