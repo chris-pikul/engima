@@ -40,6 +40,9 @@ export function circular(val:number, max:number):number {
  * The earliest index of a duplicate is not returned, instead only duplicates
  * after that index are added.
  * 
+ * Note, that it does not return how many times it duplicated, only that it was
+ * a duplicate.
+ * 
  * @param arr Input array to search
  * @returns Array of tuples for any duplicate entries.
  */

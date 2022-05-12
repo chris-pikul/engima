@@ -10,8 +10,9 @@
   "scripts": {
     "clean": "rimraf dist/**/* types/**/*",
     "lint": "npx eslint ./src/** --ext .js,.ts",
-    "test": "cross-env TS_NODE_PROJECT='tsconfig.tests.json' mocha --r ts-node/register --extension js,ts 'test/**/*.ts'",
+    "test": "cross-env TS_NODE_PROJECT='tsconfig.tests.json' mocha --r ts-node/register --extension js,ts 'tests/**/*.ts'",
     "coverage": "nyc npm run test",
+    "coverage:html": "nyc --reporter=html npm run test",
     "compile": "tsc -p tsconfig.json",
     "build": "npm run clean && npm run lint && npm test && npm run compile",
     "start": "npm run build"
