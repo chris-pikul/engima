@@ -14,7 +14,17 @@
  * internal positioning.
  */
 export interface IRotatable {
-  
+
+  /**
+   * The initial index (0-based) starting position when this component was setup
+   */
+  startingPosition:number;
+
+  /**
+   * The current index (0-based) position of the component.
+   */
+  position:number;
+
   /**
    * Advance, or rotate, the given component by the number of steps provided.
    * 
