@@ -4,7 +4,7 @@ import Stator from '../../src/components/Stator';
 
 describe('Component - Stator', () => {
   const numChars = 10;
-  const map = [ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ];
+  const map = [ 8, 5, 7, 6, 2, 3, 9, 0, 1, 4 ];
 
   describe('Stator#constructor', () => {
     it('throws an error if label is empty', () => {
@@ -26,13 +26,7 @@ describe('Component - Stator', () => {
   describe('Stator#encode()', () => {
     it('encodes a character properly', () => {
       const stator = new Stator('Test', numChars, map);
-      expect(stator.encode(0)).to.equal(9);
-    });
-
-    it('any encoding is reversable', () => {
-      const stator = new Stator('Test', numChars, map);
-      expect(stator.encode(1), 'forward encoding').to.equal(8);
-      expect(stator.encode(8), 'reverse encoding').to.equal(1);
+      expect(stator.encode(1)).to.equal(map[1]);
     });
 
     it('protects against out-of-range indices by wrapping', () => {
