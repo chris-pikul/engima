@@ -69,3 +69,47 @@ export function findDuplicates<T>(arr:Array<T>):Array<[number, T]> {
   // Return the results
   return dups;
 }
+
+/**
+ * Variation of {@link findDuplicates} which works on arrays-of-arrays.
+ * 
+ * Returns an array of tuples matching the `[ index, value, sub-array index ]`
+ * signature. Where the first value is the index of the tuple that offended as
+ * directly within the `arr` parameter. The second value is the value itself.
+ * And the third value is the index within the tuple (or sub-array) in which the
+ * value was found.
+ * 
+ * Unlike `findDuplicates()` this will match all offenders even after the first
+ * offence. Additionally it does not care about where in the tuples (sub-array)
+ * the offending value is found. In this way, you can think of this as an array
+ * reduce with an internal `Set` to catch duplicates.
+ * 
+ * @param arr Array of tuples (sub-arrays) values
+ * @returns Array of tuples matching duplicate entries
+ */
+export function findTupleDuplicates<T>(arr:Array<Array<T>>):Array<[number, T, number]> {
+  const dups:Array<[number, T, number]> = [];
+  const seen:Set<T> = new Set();
+
+  // Start searching at beginning of the array
+  for(let ind = 0; ind < arr.length; ind++) {
+    const el:Array<T> = arr[ind];
+
+    // Seach the elements within this sub-array
+    for(let sub = 0; sub < el.length; sub++) {
+      // Check if we have seen this value
+      if(seen.has(el[sub])) {
+        dups.push([
+          ind,
+          el[sub],
+          sub,
+        ]);
+      } else {
+        // New value, add it to the set
+        seen.add(el[sub]);
+      }
+    }
+  }
+
+  return dups;
+}

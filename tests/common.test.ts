@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { circular, findDuplicates } from '../src/common';
+import { circular, findDuplicates, findTupleDuplicates } from '../src/common';
 
 describe('Common - Utilities', () => {
 
@@ -37,4 +37,18 @@ describe('Common - Utilities', () => {
     });
   });
 
+  describe('findTupleDuplicates()', () => {
+    it('returns empty array on no-duplicates', () => {
+      const arr = [[1, 2], [3, 4], [5, 6]];
+      expect(findTupleDuplicates<number>(arr)).to.eql([]);
+    });
+
+    it('only returns duplicate entires once', () => {
+      const arr = [[1, 2], [3, 1], [2, 6]];
+      expect(findTupleDuplicates<number>(arr)).to.eql([
+        [1, 1, 1],
+        [2, 2, 0],
+      ]);
+    });
+  });
 });
