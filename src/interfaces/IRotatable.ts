@@ -31,7 +31,8 @@ export interface IRotatable {
    * 1 is assumed the default number of steps.
    * 
    * @param steps Optional number of steps, 1 is default
+   * @returns new position after advancement
    */
-  advance(steps?:number):void;
+  advance(steps?:number):number;
 }
 export default IRotatable;

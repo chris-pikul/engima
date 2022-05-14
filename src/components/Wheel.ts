@@ -284,9 +284,11 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
    * 
    * @implements IRotatable
    * @param steps Number of steps or positions to rotate (default 1)
+   * @returns New position index
    */
-  public advance(steps = 1):void {
+  public advance(steps = 1):number {
     this.#position = circular(this.#position + steps, this.numCharacters);
+    return this.#position;
   }
 
   /**

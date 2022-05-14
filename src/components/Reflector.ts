@@ -208,15 +208,14 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
    * false (default), calling `advance()` will just return back as a no-op.
    * 
    * @param steps Number of steps or positions to rotate (Default 1)
+   * @returns New position index
    */
-  public advance(steps = 1): void {
-    // TODO: Make this return the new position
-
-    // Shortcut out if this reflector does not move
-    if(this.moving === false)
-      return;
-
-    this.#position = circular(this.#position + steps, this.numCharacters);
+  public advance(steps = 1):number {
+    // Only move if the Reflector is setup to do so by the constructor
+    if(this.moving === true)
+      this.#position = circular(this.#position + steps, this.numCharacters);
+    
+    return this.#position;
   }
 
   /**
