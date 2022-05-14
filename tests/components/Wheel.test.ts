@@ -79,6 +79,11 @@ describe('Component - Wheel', () => {
       whl.advance(2);
       expect(whl.position).to.equal(1);
     });
+
+    it('returns the new position', () => {
+      whl.position = 0;
+      expect(whl.advance()).to.equal(1).and.to.equal(whl.position);
+    });
   });
 
   describe('functionality test', () => {

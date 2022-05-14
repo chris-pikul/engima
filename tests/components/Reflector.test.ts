@@ -81,6 +81,11 @@ describe('Component - Reflector', () => {
       ref.advance(3);
       expect(ref.position).to.equal(0);
     });
+
+    it('returns new position', () => {
+      ref.position = 0;
+      expect(ref.advance(1)).to.equal(1).and.equal(ref.position);
+    });
   });
 
   describe('Reflector#validate', () => {
