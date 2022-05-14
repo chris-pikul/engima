@@ -45,6 +45,10 @@ export class Plugboard implements IEncodable, IValidatable {
   readonly plugs:Array<PlugWire>;
 
   constructor(label:string, numChars:number, plugs?:Array<PlugWire>) {
+    // Bind methods
+    this.encode = this.encode.bind(this);
+    this.validate = this.validate.bind(this);
+
     // Apply the readonly properties
     if(label.length < 1)
       throw new Error(`Plugboard constructed with parameter 1 "label" being empty.`);
