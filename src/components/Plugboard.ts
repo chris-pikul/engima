@@ -13,7 +13,7 @@
  */
 
 import type IEncodable from '../interfaces/IEncodable';
-import type { IValidatable, OptErrors } from '../interfaces/IValidatable';
+import type IValidatable from '../interfaces/IValidatable';
 
 import { circular, findTupleDuplicates } from '../common';
 
@@ -150,9 +150,9 @@ export class Plugboard implements IEncodable, IValidatable {
    * After which, each plug is checked to ensure no value within any of the
    * tuples duplicates.
    * 
-   * @returns Undefined for no errors, or an Array of error objects
+   * @returns Array of Error objects (empty if no errors)
    */
-  public validate():OptErrors {
+  public validate():Array<Error> {
     const errs:Array<Error> = [];
 
     // Check for out-of-range plug values
@@ -165,10 +165,9 @@ export class Plugboard implements IEncodable, IValidatable {
     // Find any duplicate entries ANYWHERE in the entire scope of the plugs
     const dupErrs:Array<Error> = findTupleDuplicates<number>(this.plugs)
       .map(([ ind, val ]) => new Error(`Plugboard.plug[${ind}] has a duplicate value '${val}'`));
+    errs.push(...dupErrs);
     
-    // Only return the array if there are errors
-    if(errs.push(...dupErrs))
-      return errs;
+    return errs;
   }
 }
 export default Plugboard;

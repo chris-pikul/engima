@@ -14,7 +14,7 @@
  */
 import type IEncodable from '../interfaces/IEncodable';
 import type IRotatable from '../interfaces/IRotatable';
-import type { IValidatable, OptErrors } from '../interfaces/IValidatable';
+import type IValidatable from '../interfaces/IValidatable';
 
 import {
   circular,
@@ -229,11 +229,9 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
    * compared to {@link Reflector.numCharacters}. Then if there are any
    * duplicate values.
    * 
-   * @returns Undefined for no errors, or an Array of error objects
+   * @returns Array of Error objects (empty means no errors)
    */
-  public validate(): OptErrors {
-    const errs:OptErrors = [];
-
+  public validate(): Array<Error> {
     // First check for out-of-range values
     const oorErrs:Array<Error> = findOutOfRanges(this.wiring, this.numCharacters)
       .map(([ ind, val ]) => new Error(`Reflector.wiring[${ind}] value "${val}" is out of range for the accepted character limit "${this.numCharacters}"`));
@@ -242,9 +240,7 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
     const dupErrs:Array<Error> = findDuplicates<number>(this.wiring)
       .map(([ ind, val ]) => new Error(`Reflector.wiring[${ind}] is a duplicate value '${val}'`));
   
-    // Add the errors and return if there where any
-    if(errs.push(...oorErrs, ...dupErrs))
-      return errs;
+    return [ ...oorErrs, ...dupErrs ];
   }
 }
 export default Reflector;
