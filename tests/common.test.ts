@@ -1,5 +1,12 @@
+// test src/common.ts
 import { expect } from 'chai';
-import { circular, findDuplicates, findTupleDuplicates } from '../src/common';
+
+import {
+  circular,
+  findDuplicates,
+  findTupleDuplicates,
+  findOutOfRanges,
+} from '../src/common';
 
 describe('Common - Utilities', () => {
 
@@ -49,6 +56,18 @@ describe('Common - Utilities', () => {
         [1, 1, 1],
         [2, 2, 0],
       ]);
+    });
+  });
+
+  describe('findOutOfRanges()', () => {
+    it('returns empty on no conflicts', () => {
+      const arr = [0, 1, 2, 3];
+      expect(findOutOfRanges(arr, 4)).to.be.empty;
+    });
+
+    it('returns conflicts when found', () => {
+      const arr = [0, 1, 2, 3];
+      expect(findOutOfRanges(arr, 3)).to.have.lengthOf(1).and.eql([ [3, 3] ]);
     });
   });
 });

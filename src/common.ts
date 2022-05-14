@@ -113,3 +113,22 @@ export function findTupleDuplicates<T>(arr:Array<Array<T>>):Array<[number, T, nu
 
   return dups;
 }
+
+/**
+ * Finds any values that are not within the range of 0 to `max-1`.
+ * 
+ * Returns an array of tuples matching to `[index, value]` for each offender.
+ * 
+ * @param arr Input array of numbers
+ * @param max Maximum value (non-inclusive!). Will check if under this value
+ * @returns Array of tuples matching to `[index, value]` of any conflicts
+ */
+export function findOutOfRanges(arr:Array<number>, max:number):Array<[number, number]> {
+  /*
+   * Convert the array to an array of tuples first, then filter out the
+   * offending values. This way, we maintain the index values of the original
+   * input array.
+   */
+  return (arr.map((val, ind) => ([ ind, val ])) as Array<[number, number]>)
+    .filter(([ _, val ]) => (val < 0 || val >= max));
+}
