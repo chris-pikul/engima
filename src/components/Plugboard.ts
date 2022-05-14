@@ -25,6 +25,25 @@ import { circular, findTupleDuplicates } from '../common';
  */
 export type PlugWire = [number, number];
 
+/**
+ * The Plugboard, or Steckerbrett is the component that adds additional
+ * substitution encoding during the operation of the Enigma machine.
+ * 
+ * When a key is pressed, the signal is sent through the Plugboard first, in
+ * which it may, or may not (depending on how it is configured), re-route keys
+ * to a different character. This is determined by the plug wires that are
+ * inserted into the plugboard connecting one character to another. This
+ * substitution works both ways. For instance, if a plug is inserted connecting
+ * A to Z, then on pressing A, the output is Z. Inversly, when pressing Z, the
+ * output is A. Most procedures used up to 10 plugs connected.
+ * 
+ * After the first pass with the plugboard, the new character is sent to the
+ * rotor wheel assembly for encoding. After which, the character is passed back
+ * through the plugboard for an additional encoding step before finally being
+ * output.
+ * 
+ * @todo Implement the Uhr
+ */
 export class Plugboard implements IEncodable, IValidatable {
   /**
    * A given label for this plugboard model
@@ -55,6 +74,7 @@ export class Plugboard implements IEncodable, IValidatable {
   readonly plugs:Array<PlugWire>;
 
   /**
+   * Creates a Plugboard.
    * 
    * @param label Displayable string used to identify this Plugboard
    * @param numChars Number of characters this Plugboard supports. Each
