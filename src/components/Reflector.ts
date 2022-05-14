@@ -156,6 +156,14 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
   }
 
   /**
+   * Sets the current position the Reflector is in, while keeping the value
+   * within the range set by 0..{@link Reflector.numCharacters}.
+   */
+  set position(index:number) {
+    this.#position = circular(index, this.numCharacters);
+  }
+
+  /**
    * True, if the {@link Reflector.setup()} method has been called
    */
   get isSetup():boolean {
@@ -202,6 +210,8 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
    * @param steps Number of steps or positions to rotate (Default 1)
    */
   public advance(steps = 1): void {
+    // TODO: Make this return the new position
+
     // Shortcut out if this reflector does not move
     if(this.moving === false)
       return;
@@ -219,6 +229,8 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
    */
   public validate():OptErrors {
     const dups:Array<[number, number]> = findDuplicates<number>(this.wiring);
+
+    // TODO: Check each value is within range
 
     if(dups.length)
       return dups.map(([ ind, val ]) => new Error(`Reflector.wiring[${ind}] is a duplicate value '${val}'`));
