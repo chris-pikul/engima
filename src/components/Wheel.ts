@@ -131,6 +131,24 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
    */
   #init:boolean;
 
+  /**
+   * Construct a new Wheel.
+   * 
+   * @param label Displayable string name for this Wheel
+   * @param numChars How many characters this wheel supports
+   * @param display An array of strings mapping each character indice to a
+   * displayable text
+   * @param wiring Array of output indices that maps 1-to-1 with input indices.
+   * None of the values within this array may duplicate. See
+   * {@link Wheel.wiring} for more information.
+   * @param notches Array of indice points in which when the wheel is at that
+   * position, it is considered to have an active notch.
+   * 
+   * @throws TypeError if `label` is empty
+   * @throws TypeError if `numChars` is 0 or below
+   * @throws TypeError if `display` is not an Array of same length as `numChars`
+   * @throws TypeError if `wiring` is not an Array of same length as `numChars`
+   */
   constructor(label:string, numChars:number, display?:Array<string>, wiring?:Array<number>, notches?:Array<number>) {
     // Bind methods
     this.setup = this.setup.bind(this);

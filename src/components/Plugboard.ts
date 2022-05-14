@@ -39,11 +39,35 @@ export class Plugboard implements IEncodable, IValidatable {
   /**
    * The plugs as they are inserted into the plugboard.
    * 
+   * Each tuple maps to `[input, output]`,
+   * where input is treated as the input character index, which should map to
+   * the output character index.
+   * 
    * Each entry in this array should be a unique tuple with no duplicate values
    * anywhere within the children (within the scope of the whole plugs array).
+   * 
+   * Example:
+   * ```
+   * plugs = [ [0,2], [1, 3], [4, 5] ]; // OK
+   * plugs = [ [0,2], [1, 2], [4, 5] ]; // BAD, 2 is duplicated
+   * ```
    */
   readonly plugs:Array<PlugWire>;
 
+  /**
+   * 
+   * @param label Displayable string used to identify this Plugboard
+   * @param numChars Number of characters this Plugboard supports. Each
+   * component of the final Enigma machine must have matching character values.
+   * @param plugs Array of number tuples that maps to the currently configured
+   * plugs inserted into the Plugboard. Each tuple maps to `[input, output]`,
+   * where input is treated as the input character index, which should map to
+   * the output character index. None of the values within the array including
+   * the values of the sub-array tuples may duplicate.
+   * 
+   * @throws TypeError if `label` is an empty string
+   * @throws TypeError if `numChars` is 0 or below
+   */
   constructor(label:string, numChars:number, plugs?:Array<PlugWire>) {
     // Bind methods
     this.encode = this.encode.bind(this);
@@ -62,6 +86,26 @@ export class Plugboard implements IEncodable, IValidatable {
     this.plugs = plugs ?? [];
   }
 
+  /**
+   * Performs the encoding of a given index into another.
+   * 
+   * The plugboard will check the current {@link Plugboard.plugs} array for a
+   * matching {@link PlugWire} tuple with an entry in either position matching
+   * the parameter `index`. If a match is made, the opposite value in the tuple
+   * is returned. If no matches are found, then the input index is passed
+   * through un-changed.
+   * 
+   * Example:
+   * ```
+   * Plugboard.plugs = [ [0, 2], [1, 3], [4, 5] ];
+   * encode(6); // Output 6 because no matching plugs.
+   * encode(3); // Output 1 because plugs[1] had a match, and returned opposite
+   * ```
+   * 
+   * @implements IEncodable
+   * @param index Input character index
+   * @returns New character index
+   */
   public encode(index:number):number {
     // Sanity check the input
     const inp = circular(index, this.numCharacters);
@@ -77,6 +121,17 @@ export class Plugboard implements IEncodable, IValidatable {
     return index;
   }
 
+  /**
+   * Checks that this Plugboard's settings are valid.
+   * 
+   * First, each plug in {@link Plugboard.plugs} is checked to ensure that each
+   * value is within the range of 0..{@link Plugboard.numCharacters}.
+   * 
+   * After which, each plug is checked to ensure no value within any of the
+   * tuples duplicates.
+   * 
+   * @returns Undefined for no errors, or an Array of error objects
+   */
   public validate():OptErrors {
     const errs:Array<Error> = [];
 

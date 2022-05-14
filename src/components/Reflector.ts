@@ -92,6 +92,23 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
    */
   #init:boolean;
 
+  /**
+   * Create new Reflector.
+   * 
+   * @param label Displayable string for this Reflector model
+   * @param numChars Number of characters this Reflector supports. Each
+   * component of the final Enigma machine must have matching character values.
+   * @param wiring Array of output indices mapping 1-to-1 for input indices.
+   * None of the values in this array may duplicate. See
+   * {@link Reflector.wiring} for more information.
+   * @param moving Does this Reflector support rotating during use. Defaults to
+   * false as most all models do not.
+   * 
+   * @throws TypeError if `label` is an empty string
+   * @throws TypeError if `numChars` is 0 or below
+   * @throws TypeError if `wiring` is not an array at the same length as
+   * `numChars`
+   */
   constructor(label:string, numChars:number, wiring:Array<number>, moving = false) {
     // Bind methods
     this.setup = this.setup.bind(this);

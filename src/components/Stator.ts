@@ -39,9 +39,30 @@ export class Stator implements IEncodable, IValidatable {
 
   /**
    * Internal mapping of character indices to an output index.
+   * 
+   * When the Enigma operates (encoding) it passes a character index (0-based)
+   * into each component. The mapping, or wiring, of each component then takes
+   * this incoming character index and re-writes it into a new character index.
+   * 
+   * No values within the mapping/wiring may duplicate. This is very important
+   * to ensure proper encoding/decoding.
    */
   readonly mapping:Array<number>;
 
+  /**
+   * Create new Stator.
+   * 
+   * @param label Displayable string for this Stator model
+   * @param numChars Number of characters this Stator supports. Each component
+   * of the final Enigma machine must have matching character values.
+   * @param map Array of output indices mapping 1-to-1 for input indices. None
+   * of the values in this array may duplicate. See {@link Stator.mapping} for
+   * more information.
+   * 
+   * @throws TypeError if `label` is an empty string
+   * @throws TypeError if `numChars` is 0 or below
+   * @throws TypeError if `map` is not an array at the same length as `numChars`
+   */
   constructor(label:string, numChars:number, map:Array<number>) {
     // Bind methods
     this.encode = this.encode.bind(this);
