@@ -89,9 +89,9 @@ describe('Component - Reflector', () => {
   });
 
   describe('Reflector#validate', () => {
-    it('returns undefined when no errors', () => {
+    it('returns empty when no errors', () => {
       const ref = new Reflector('T', 3, [1, 0, 2]);
-      expect(ref.validate()).to.be.undefined;
+      expect(ref.validate()).to.be.empty;
     });
 
     it('catches duplicate wirings', () => {

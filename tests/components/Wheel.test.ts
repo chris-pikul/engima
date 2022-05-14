@@ -86,6 +86,18 @@ describe('Component - Wheel', () => {
     });
   });
 
+  describe('Wheel#validate()', () => {
+    it('returns empty on valid', () => {
+      const whl = new Wheel('T', numChar, disp, wire);
+      expect(whl.validate()).to.be.empty;
+    });
+
+    it('catches duplicate wirings', () => {
+      const whl = new Wheel('T', numChar, disp, [0,1,2,3,3]);
+      expect(whl.validate()).to.have.lengthOf(1);
+    });
+  });
+
   describe('functionality test', () => {
     const whl = new Wheel('Test', numChar, disp, wire);
 

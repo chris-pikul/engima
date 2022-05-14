@@ -37,9 +37,9 @@ describe('Component - Stator', () => {
   });
 
   describe('Stator#validate()', () => {
-    it('returns undefined for no errors', () => {
+    it('returns empty for no errors', () => {
       const stator = new Stator('Test', numChars, map);
-      expect(stator.validate()).to.be.undefined;
+      expect(stator.validate()).to.be.empty;
     });
 
     it('returns an array of errors for any duplicate mappings', () => {
