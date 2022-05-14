@@ -143,14 +143,11 @@ export class Plugboard implements IEncodable, IValidatable {
     }
 
     // Find any duplicate entries ANYWHERE in the entire scope of the plugs
-    const dups:Array<[number, number, number]> = findTupleDuplicates<number>(this.plugs);
-    if(dups.length) {
-      const dupErrs = dups.map(([ ind, val ]) => new Error(`Plugboard.plug[${ind}] has a duplicate value '${val}'`));
-      errs.push(...dupErrs);
-    }
-
+    const dupErrs:Array<Error> = findTupleDuplicates<number>(this.plugs)
+      .map(([ ind, val ]) => new Error(`Plugboard.plug[${ind}] has a duplicate value '${val}'`));
+    
     // Only return the array if there are errors
-    if(errs.length)
+    if(errs.push(...dupErrs))
       return errs;
   }
 }

@@ -14,7 +14,11 @@
 import type IEncodable from '../interfaces/IEncodable';
 import type { IValidatable, OptErrors } from '../interfaces/IValidatable';
 
-import { circular, findDuplicates } from '../common';
+import {
+  circular,
+  findDuplicates,
+  findOutOfRanges,
+} from '../common';
 
 /**
  * Represents the Stator, Entrittswalze (ETW), or entry wheel, of an Enigma 
@@ -46,6 +50,8 @@ export class Stator implements IEncodable, IValidatable {
    * 
    * No values within the mapping/wiring may duplicate. This is very important
    * to ensure proper encoding/decoding.
+   * 
+   * @todo Refactor rename this to wiring to match the other components
    */
   readonly mapping:Array<number>;
 
@@ -97,15 +103,26 @@ export class Stator implements IEncodable, IValidatable {
   /**
    * Checks that this Stator's settings are valid.
    * 
-   * A Stator is considered invalid if any of the mappings repeat.
+   * First, the wiring is checked for any values that are out-of-range indices
+   * compared to {@link Stator.numCharacters}. Then if there are any duplicate
+   * values.
    * 
    * @returns Undefined for no errors, or an Array of error objects
    */
-  public validate():OptErrors {
-    const dups:Array<[number, number]> = findDuplicates<number>(this.mapping);
+  public validate(): OptErrors {
+    const errs:OptErrors = [];
 
-    if(dups.length)
-      return dups.map(([ ind, val ]) => new Error(`Stator.mapping[${ind}] is a duplicate value '${val}'`));
+    // First check for out-of-range values
+    const oorErrs:Array<Error> = findOutOfRanges(this.mapping, this.numCharacters)
+      .map(([ ind, val ]) => new Error(`Stator.mapping[${ind}] value "${val}" is out of range for the accepted character limit "${this.numCharacters}"`));
+
+    // Then check for duplicates
+    const dupErrs:Array<Error> = findDuplicates<number>(this.mapping)
+      .map(([ ind, val ]) => new Error(`Stator.mapping[${ind}] is a duplicate value '${val}'`));
+  
+    // Add the errors and return if there where any
+    if(errs.push(...oorErrs, ...dupErrs))
+      return errs;
   }
 }
 export default Stator;

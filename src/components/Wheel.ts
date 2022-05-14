@@ -14,7 +14,11 @@ import type IEncodable from '../interfaces/IEncodable';
 import type IRotatable from '../interfaces/IRotatable';
 import type { IValidatable, OptErrors } from '../interfaces/IValidatable';
 
-import { circular, findDuplicates } from '../common';
+import {
+  circular,
+  findDuplicates,
+  findOutOfRanges,
+} from '../common';
 
 /**
  * Represents the Wheel, or "Rotor" of the Enigma machine.
@@ -294,15 +298,26 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
   /**
    * Checks that this Wheel's settings are valid.
    * 
-   * A Wheel is considered invalid if any of the wirings repeat.
+   * First, the wiring is checked for any values that are out-of-range indices
+   * compared to {@link Wheel.numCharacters}. Then if there are any duplicate
+   * values.
    * 
    * @returns Undefined for no errors, or an Array of error objects
    */
   public validate(): OptErrors {
-    const dups:Array<[number, number]> = findDuplicates<number>(this.wiring);
+    const errs:OptErrors = [];
 
-    if(dups.length)
-      return dups.map(([ ind, val ]) => new Error(`Wheel.wiring[${ind}] is a duplicate value '${val}'`));
+    // First check for out-of-range values
+    const oorErrs:Array<Error> = findOutOfRanges(this.wiring, this.numCharacters)
+      .map(([ ind, val ]) => new Error(`Wheel.wiring[${ind}] value "${val}" is out of range for the accepted character limit "${this.numCharacters}"`));
+
+    // Then check for duplicates
+    const dupErrs:Array<Error> = findDuplicates<number>(this.wiring)
+      .map(([ ind, val ]) => new Error(`Wheel.wiring[${ind}] is a duplicate value '${val}'`));
+  
+    // Add the errors and return if there where any
+    if(errs.push(...oorErrs, ...dupErrs))
+      return errs;
   }
 }
 

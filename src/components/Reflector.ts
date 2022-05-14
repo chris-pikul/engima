@@ -16,7 +16,11 @@ import type IEncodable from '../interfaces/IEncodable';
 import type IRotatable from '../interfaces/IRotatable';
 import type { IValidatable, OptErrors } from '../interfaces/IValidatable';
 
-import { circular, findDuplicates } from '../common';
+import {
+  circular,
+  findDuplicates,
+  findOutOfRanges,
+} from '../common';
 
 /**
  * Reflector, or Umkehrwalze (UKW).
@@ -219,20 +223,28 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
   }
 
   /**
-   * Validates that the settings for the Reflector are correct.
+   * Checks that this Reflector's settings are valid.
    * 
-   * This basically just ensures that there is no duplicate values in the wiring
-   * array.
+   * First, the wiring is checked for any values that are out-of-range indices
+   * compared to {@link Reflector.numCharacters}. Then if there are any
+   * duplicate values.
    * 
-   * @returns Undefined if no errors, or an array of error objects
+   * @returns Undefined for no errors, or an Array of error objects
    */
-  public validate():OptErrors {
-    const dups:Array<[number, number]> = findDuplicates<number>(this.wiring);
+  public validate(): OptErrors {
+    const errs:OptErrors = [];
 
-    // TODO: Check each value is within range
+    // First check for out-of-range values
+    const oorErrs:Array<Error> = findOutOfRanges(this.wiring, this.numCharacters)
+      .map(([ ind, val ]) => new Error(`Reflector.wiring[${ind}] value "${val}" is out of range for the accepted character limit "${this.numCharacters}"`));
 
-    if(dups.length)
-      return dups.map(([ ind, val ]) => new Error(`Reflector.wiring[${ind}] is a duplicate value '${val}'`));
+    // Then check for duplicates
+    const dupErrs:Array<Error> = findDuplicates<number>(this.wiring)
+      .map(([ ind, val ]) => new Error(`Reflector.wiring[${ind}] is a duplicate value '${val}'`));
+  
+    // Add the errors and return if there where any
+    if(errs.push(...oorErrs, ...dupErrs))
+      return errs;
   }
 }
 export default Reflector;
