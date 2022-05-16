@@ -83,5 +83,12 @@ export interface Model {
    * Does this model feature a plugboard?
    */
   plugboard?:boolean;
+
+  /**
+   * Does this model feature a cog-wheel drive for the wheels?
+   * 
+   * Most models featured a lever based mechanism.
+   */
+  cogDrive?:boolean;
 };
 export default Model;
