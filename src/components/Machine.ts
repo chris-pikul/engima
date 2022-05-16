@@ -18,6 +18,12 @@ import Reflector from './Reflector';
 import Stator from './Stator';
 import Wheel from './Wheel';
 
+/**
+ * The Machine represents the physical collection of all the components and
+ * settings into a singular model used for encoding messages. This Class is
+ * intended to be the main representation of any Enigma model as it actually
+ * performs the functionality needed to do the encoding.
+ */
 export class Machine implements IValidatable {
   /**
    * Displayable string identifying the model of this Machine.
@@ -67,8 +73,18 @@ export class Machine implements IValidatable {
    */
   #init = false;
 
+  /**
+   * Creates a new Machine
+   * @param label Displayable string to identify this Machine
+   * @param numChars Number of characters supported
+   * @param etw Entry-wheel Stator object
+   * @param wheels Array of rotor Wheel objects./See {@link Machine.wheels}}.
+   * @param ukw Reflector object
+   * @param plugboard Optional Plugboard object
+   */
   constructor(label:string, numChars:number, etw:Stator, wheels:Array<Wheel>, ukw:Reflector, plugboard?:Plugboard) {
     // Bind Methods
+    this.validate = this.validate.bind(this);
 
     // Apply properties and check for loose validity
     if(label.length <= 0)
