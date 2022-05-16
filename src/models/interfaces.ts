@@ -54,6 +54,23 @@ export interface ModelReflector {
    * wiring of a physical one as it was found.
    */
   rewirable?:boolean;
+
+  /**
+   * Can the starting position of this Reflector be set at initialization?
+   */
+  positionable?:boolean;
+
+  /**
+   * Does this Reflector rotate during operation?
+   * 
+   * Currently only the Model Z featured this functionality.
+   */
+  rotating?:boolean;
+
+  /**
+   * If this Reflector rotates, where are the notches located.
+   */
+  notches?:Array<string>;
 };
 
 /**
