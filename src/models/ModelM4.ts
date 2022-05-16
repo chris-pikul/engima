@@ -22,8 +22,8 @@ import { AlphabetABC } from '../alphabet';
  * the Kriegsmarine U-Boat division. It features a special UKW and wheel combo
  * allowing the housing to hold 4 wheels (rotors) instead of 3.
  */
-export const ModelM3:Model = {
-  label: 'M4',
+export const ModelM4:Model = {
+  label: 'M4 (Kriegsmarine U-Boat)',
 
   alphabet: AlphabetABC,
 
@@ -85,4 +85,4 @@ export const ModelM3:Model = {
 
   plugboard: true,
 };
-export default ModelM3;
+export default ModelM4;

@@ -19,10 +19,10 @@ import { AlphabetABC } from '../alphabet';
 
 /**
  * Standard German Military issue Model I Enigma. Used by the Wehrmacht and the
- * Liftwaffe, it is sometimes referred to as the Services Enigma.
+ * Luftwaffe, it is sometimes referred to as the Services Enigma.
  */
 const ModelI:Model = {
-  label: 'I',
+  label: 'I (Wehrmacht/Luftwaffe)',
 
   alphabet: AlphabetABC,
 

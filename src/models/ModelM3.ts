@@ -27,7 +27,7 @@ import { AlphabetABC } from '../alphabet';
  * this model is compatible with messages sent from the Model I.
  */
 export const ModelM3:Model = {
-  label: 'M3',
+  label: 'M3 (Kriegsmarine)',
 
   alphabet: AlphabetABC,
 

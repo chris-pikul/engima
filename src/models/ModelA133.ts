@@ -17,7 +17,7 @@ import type Model from './interfaces';
 import { Alphabet28 } from '../alphabet';
 
 const ModelA133:Model = {
-  label: 'A-133',
+  label: 'B (A-133)',
 
   alphabet: Alphabet28,
 
