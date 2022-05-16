@@ -17,7 +17,7 @@ import type Model from './interfaces';
 import { AlphabetQWERTZ } from '../alphabet';
 
 const ModelD:Model = {
-  label: 'D',
+  label: 'D (Commercial A26)',
 
   alphabet: AlphabetQWERTZ,
 

@@ -46,6 +46,14 @@ export interface ModelReflector {
    * the Models standard alphabet.
    */
   wiring:string;
+
+  /**
+   * Is this Reflector rewirable? (UKW-D).
+   * 
+   * The wiring may still be provided as a sane-default, or to reflect the
+   * wiring of a physical one as it was found.
+   */
+  rewirable?:boolean;
 };
 
 /**
