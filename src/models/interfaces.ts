@@ -73,5 +73,10 @@ export interface Model {
    * Available reflectors for this Model.
    */
   reflectors:Array<ModelReflector>;
+
+  /**
+   * Does this model feature a plugboard?
+   */
+  plugboard?:boolean;
 };
 export default Model;
