@@ -24,6 +24,11 @@ export interface ModelWheel {
    * The characters which provide the indices for the notch positions.
    */
   notches:Array<string>;
+
+  /**
+   * Is this wheel a special "thin" variant for a 4-th wheel (present on the M4)
+   */
+  thin?:boolean;
 };
 
 /**
