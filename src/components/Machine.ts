@@ -11,6 +11,8 @@
  * primary interaction for any Enigma simulations
  */
 
+import { getCharacterFromIndex, getCharacterIndex } from '../alphabet';
+import { forEachReverse } from '../common';
 import type IValidatable from '../interfaces/IValidatable';
 
 import Plugboard from './Plugboard';
@@ -29,6 +31,14 @@ export class Machine implements IValidatable {
    * Displayable string identifying the model of this Machine.
    */
   readonly label:string;
+
+  /**
+   * The alphabet that is accepted by this Machine.
+   * 
+   * This is a string containing each character once. From this alphabet, the
+   * number of characters {@link Machine.numCharacters} is derived.
+   */
+  readonly alphabet:string;
 
   /**
    * The number of characters present on this Machine. This is considered the
@@ -82,8 +92,9 @@ export class Machine implements IValidatable {
    * @param ukw Reflector object
    * @param plugboard Optional Plugboard object
    */
-  constructor(label:string, numChars:number, etw:Stator, wheels:Array<Wheel>, ukw:Reflector, plugboard?:Plugboard) {
+  constructor(label:string, alphabet:string, etw:Stator, wheels:Array<Wheel>, ukw:Reflector, plugboard?:Plugboard) {
     // Bind Methods
+    this.encode = this.encode.bind(this);
     this.validate = this.validate.bind(this);
 
     // Apply properties and check for loose validity
@@ -91,9 +102,10 @@ export class Machine implements IValidatable {
       throw new TypeError(`Machine constructed with an empty 'label' parameter [0].`);
     this.label = label;
 
-    if(numChars <= 0)
-      throw new TypeError(`Machine constructed with an invalid 'numChars' parameter [1].`);
-    this.numCharacters = numChars;
+    if(alphabet.length === 0)
+      throw new TypeError(`Machine constructed with an invalid 'alphabet' parameter [1].`);
+    this.alphabet = alphabet.toUpperCase();
+    this.numCharacters = this.alphabet.length;
 
     if((etw instanceof Stator) === false)
       throw new TypeError(`Machine constructed with an invalid 'etw' parameter [2].`);
@@ -112,6 +124,85 @@ export class Machine implements IValidatable {
         throw new TypeError(`Machine constructed with an invalid 'plugboard' parameter [5]`);
       this.plugboard = plugboard;
     }
+  }
+
+  /**
+   * Performs encoding of a single string character into an output character.
+   * 
+   * This will perform any mechanical operations such as advancing of wheels
+   * during the encoding process. This advancement process happens before the
+   * character is encoded by the wheels.
+   * 
+   * The general order of encoding process is as follows:
+   * 
+   * ```
+   * Keyboard -> Plugboard? -> Stator -> Wheel[0]..Wheel[N] ->
+   * Reflector -> Wheel[N]..Wheel[0] -> Stator -> Plugboard? ->
+   * Output
+   * ```
+   * 
+   * @param char Input character to encode
+   * @param spaceAs Convert spaces to this character
+   * @param unknownAs Fallback for any unknown characters
+   * @returns New character
+   */
+  public encode(char:string, spaceAs = 'X', unknownAs = 'X'):string {
+    // Normalize the character
+    let input = char[0].toUpperCase();
+
+    // Check if it is a white-space character
+    if(input === ' ' || input === '\t' || input === '\n')
+      input = spaceAs;
+
+    // Ensure the input is a single character
+    if(input.length === 0 || input.length > 1)
+      throw new Error(`Machine.encode() recieved a character that was either empty, or longer than 1 character.`);
+
+    // Start by converting the character to the keyboard alphabet index
+    let index = getCharacterIndex(this.alphabet, input, unknownAs);
+
+    // Use the plugboard if it's installed
+    if(this.plugboard)
+      index = this.plugboard.encode(index);
+    
+    // Use the Stator (ETW)
+    index = this.entryWheel.encode(index);
+
+    /*
+     * Advance the wheels. The right-most [0] wheel always advances, the rest
+     * only advance if they are at the notch position. The notch consideration
+     * is done regardless of any wheel movements that have happened in this
+     * loop already.
+     * 
+     * After advancement, perform the encoding on the character
+     */
+    this.wheels.forEach((whl:Wheel, ind:number) => {
+      if(ind === 0 || whl.atNotch)
+        whl.advance();
+
+      index = whl.encode(index);
+    });
+
+    // If the reflector is capable of moving, do so first
+    this.reflector.advance();
+
+    // Use the reflector next before passing back through the wheels in reverse.
+    index = this.reflector.encode(index);
+
+    // Go through the wheels, in reverse
+    forEachReverse<Wheel>(this.wheels, (whl:Wheel) => {
+      index = whl.encode(index);
+    });
+
+    // Back out through the stator
+    index = this.entryWheel.encode(index);
+
+    // If the plugboard is present, then use it
+    if(this.plugboard)
+      index = this.plugboard.encode(index);
+
+    // Final output is ready, convert back to the alphabet
+    return getCharacterFromIndex(this.alphabet, index, unknownAs);
   }
 
   /**
