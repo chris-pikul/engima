@@ -95,6 +95,7 @@ export class Machine implements IValidatable {
   constructor(label:string, alphabet:string, etw:Stator, wheels:Array<Wheel>, ukw:Reflector, plugboard?:Plugboard) {
     // Bind Methods
     this.encode = this.encode.bind(this);
+    this.encodeMessage = this.encodeMessage.bind(this);
     this.validate = this.validate.bind(this);
 
     // Apply properties and check for loose validity
@@ -203,6 +204,25 @@ export class Machine implements IValidatable {
 
     // Final output is ready, convert back to the alphabet
     return getCharacterFromIndex(this.alphabet, index, unknownAs);
+  }
+
+  /**
+   * Encodes an entire string message and returns the results.
+   * 
+   * Note: This does not perform message formatting and will convert 1-to-1.
+   * 
+   * @param msg String message to encode
+   * @param spaceAs Converts white-space to this character
+   * @param unknownAs Fallback for any unknown characters
+   * @returns New string of encoded characters
+   */
+  public encodeMessage(msg:string, spaceAs = 'X', unknownAs = 'X'):string {
+    if(msg.length === 0)
+      return msg;
+
+    return msg.split('')
+      .map(char => this.encode(char, spaceAs, unknownAs))
+      .join('');
   }
 
   /**
