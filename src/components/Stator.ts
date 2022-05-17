@@ -19,6 +19,8 @@ import {
   findDuplicates,
   findOutOfRanges,
 } from '../common';
+import { Model } from '../models';
+import { getWiring } from '../alphabet';
 
 /**
  * Represents the Stator, Entrittswalze (ETW), or entry wheel, of an Enigma 
@@ -29,6 +31,21 @@ import {
  * connections into the remaining wheels (rotors) and back out again.
  */
 export class Stator implements IEncodable, IValidatable {
+  /**
+   * Creates a new Stator based on a given data model.
+   * 
+   * @param model Parent Enigma data model
+   * @returns New {@link Stator} object
+   */
+  public static fromModel(model:Model):Stator {
+    const alpha = model.stator ?? model.alphabet;
+    return new Stator(
+      model.label,
+      alpha.length,
+      getWiring(model.alphabet, alpha),
+    );
+  }
+
   /**
    * Displayable label (or name) for this Stator.
    */
