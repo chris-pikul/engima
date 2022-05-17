@@ -132,3 +132,19 @@ export function findOutOfRanges(arr:Array<number>, max:number):Array<[number, nu
   return (arr.map((val, ind) => ([ ind, val ])) as Array<[number, number]>)
     .filter(([ _, val ]) => (val < 0 || val >= max));
 }
+
+/**
+ * Callback signature for `Array.forEach()`.
+ */
+export type ArrayForEachCB<T> = (item:T, index:number, arr:Array<T>) => void;
+
+/**
+ * Performs a forEach style iteration on an Array in reverse.
+ * 
+ * @param arr Input array
+ * @param cb Callback with `(item, index, array) => void` signature
+ */
+export function forEachReverse<T>(arr:Array<T>, cb:ArrayForEachCB<T>):void {
+  for(let ind = (arr.length - 1); ind >= 0; ind--)
+    cb(arr[ind], ind, arr);
+}
