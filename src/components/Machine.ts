@@ -78,7 +78,7 @@ export class Machine implements IValidatable {
    * @param label Displayable string to identify this Machine
    * @param numChars Number of characters supported
    * @param etw Entry-wheel Stator object
-   * @param wheels Array of rotor Wheel objects./See {@link Machine.wheels}}.
+   * @param wheels Array of rotor Wheel objects. See {@link Machine.wheels}}.
    * @param ukw Reflector object
    * @param plugboard Optional Plugboard object
    */
@@ -101,7 +101,7 @@ export class Machine implements IValidatable {
 
     if(!wheels || Array.isArray(wheels) === false)
       throw new TypeError(`Machine constructed with an invalid 'wheels' parameter [3].`);
-    this.wheels = wheels;
+    this.wheels = [];
 
     if((ukw instanceof Reflector) === false)
       throw new TypeError(`Machine constructed with an invalid 'ukw' parameter [4]`);
