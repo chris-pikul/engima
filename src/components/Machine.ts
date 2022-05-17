@@ -207,7 +207,16 @@ export class Machine implements IValidatable {
   }
 
   /**
-   * Encodes an entire string message and returns the results.
+   * Processes an entire string message and returns the results.
+   * 
+   * Encoding/Decoding on Enigma machines works the same for both so there is
+   * no need to distinguish between the two.
+   * 
+   * Ie:
+   * ```
+   * Plain-text => processMessage() => Cipher-text
+   * Cipher-text => processMessage() => Plain-text
+   * ```
    * 
    * Note: This does not perform message formatting and will convert 1-to-1.
    * 
