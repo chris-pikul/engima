@@ -13,12 +13,15 @@
 import type IEncodable from '../interfaces/IEncodable';
 import type IRotatable from '../interfaces/IRotatable';
 import type IValidatable from '../interfaces/IValidatable';
+import type { Model, ModelWheel } from '../models';
 
 import {
   circular,
   findDuplicates,
   findOutOfRanges,
 } from '../common';
+
+import { getWiring } from '../alphabet';
 
 /**
  * Represents the Wheel, or "Rotor" of the Enigma machine.
@@ -31,6 +34,23 @@ import {
  * offset the internal alphabet wiring.
  */
 export class Wheel implements IEncodable, IRotatable, IValidatable {
+  /**
+   * Creates a new Wheel object based on provided data models.
+   * 
+   * @param model Parent data model for the Enigma this belongs to
+   * @param wheel Data model for this wheel
+   * @returns New {@link Wheel} object
+   */
+  public static fromModel(model:Model, wheel:ModelWheel):Wheel {
+    return new Wheel(
+      wheel.label,
+      model.alphabet.length,
+      wheel.display ?? model.alphabet.split(''),
+      getWiring(model.alphabet, wheel.wiring),
+      getWiring(model.alphabet, wheel.notches.join('')),
+    );
+  }
+
   /* eslint-disable array-element-newline */
   /**
    * Available display types for the "rings" of the wheel. In a physical Enigma

@@ -31,6 +31,12 @@ export interface ModelWheel {
   notches:Array<string>;
 
   /**
+   * The displayed characters on the ring of this wheel as it would be viewed
+   * from the machine window.
+   */
+  display?:Array<string>;
+
+  /**
    * Is this wheel a special "thin" variant for a 4-th wheel (present on the M4)
    */
   thin?:boolean;
