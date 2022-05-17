@@ -21,6 +21,8 @@ import {
   findDuplicates,
   findOutOfRanges,
 } from '../common';
+import { Model, ModelReflector } from '../models';
+import { getWiring } from '../alphabet';
 
 /**
  * Reflector, or Umkehrwalze (UKW).
@@ -32,6 +34,22 @@ import {
  * custom re-wiring (UKW-D).
  */
 export class Reflector implements IEncodable, IRotatable, IValidatable {
+  /**
+   * Creates a new Reflector object based on given data models
+   * 
+   * @param model Parent data model for the Enigma that uses this
+   * @param refl Data model for this Reflector
+   * @returns New {@link Reflector} object
+   */
+  public static fromModel(model:Model, refl:ModelReflector):Reflector {
+    return new Reflector(
+      refl.label,
+      model.alphabet.length,
+      getWiring(model.alphabet, refl.wiring),
+      refl.rotating,
+    );
+  }
+
   /**
    * The displayed label or name for this wheel
    */
