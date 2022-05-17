@@ -94,8 +94,8 @@ export class Machine implements IValidatable {
    */
   constructor(label:string, alphabet:string, etw:Stator, wheels:Array<Wheel>, ukw:Reflector, plugboard?:Plugboard) {
     // Bind Methods
-    this.encode = this.encode.bind(this);
-    this.encodeMessage = this.encodeMessage.bind(this);
+    this.processCharacter = this.processCharacter.bind(this);
+    this.processMessage = this.processMessage.bind(this);
     this.validate = this.validate.bind(this);
 
     // Apply properties and check for loose validity
@@ -147,7 +147,7 @@ export class Machine implements IValidatable {
    * @param unknownAs Fallback for any unknown characters
    * @returns New character
    */
-  public encode(char:string, spaceAs = 'X', unknownAs = 'X'):string {
+  public processCharacter(char:string, spaceAs = 'X', unknownAs = 'X'):string {
     // Normalize the character
     let input = char[0].toUpperCase();
 
@@ -216,12 +216,12 @@ export class Machine implements IValidatable {
    * @param unknownAs Fallback for any unknown characters
    * @returns New string of encoded characters
    */
-  public encodeMessage(msg:string, spaceAs = 'X', unknownAs = 'X'):string {
+  public processMessage(msg:string, spaceAs = 'X', unknownAs = 'X'):string {
     if(msg.length === 0)
       return msg;
 
     return msg.split('')
-      .map(char => this.encode(char, spaceAs, unknownAs))
+      .map(char => this.processCharacter(char, spaceAs, unknownAs))
       .join('');
   }
 
