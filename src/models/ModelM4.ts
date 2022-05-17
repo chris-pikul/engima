@@ -27,50 +27,60 @@ export const ModelM4:Model = {
 
   alphabet: AlphabetABC,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'EKMFLGDQVZNTOWYHXUSPAIBRCJ',
       notches: [ 'Y' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'AJDKSIRUXBLHWTMCQGZNPYFVOE',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'BDFHJLCPRTXVZNYEIWGAKMUSQO',
       notches: [ 'D' ],
     },
-    IV: {
+    {
+      label: 'IV',
       wiring: 'ESOVPZJAYQUIRHXLNFTGKDCMWB',
       notches: [ 'R' ],
     },
-    V: {
+    {
+      label: 'V',
       wiring: 'VZBRGITYUPSDNHLXAWMJQOFECK',
       notches: [ 'H' ],
     },
-    VI: {
+    {
+      label: 'VI',
       wiring: 'JPGVOUMFYQBENHZRDKASXLICTW',
       notches: [ 'H', 'U' ],
     },
-    VII: {
+    {
+      label: 'VII',
       wiring: 'NZJHGRCXMYSWBOUFAIVLPEKQDT',
       notches: [ 'H', 'U' ],
     },
-    VIII: {
+    {
+      label: 'VIII',
       wiring: 'FKQHTLXOCBJSPDZRAMEWNIUYGV',
       notches: [ 'H', 'U' ],
     },
-    Beta: {
+    {
+      label: 'Beta',
       wiring: 'LEYJVCNIXWPBQMDRTAKZGFUHOS',
       notches: [],
       thin: true,
     },
-    Gamma: {
+    {
+      label: 'Gamma',
       wiring: 'FSOKANUERHMBTIYCWLQPZXVGJD',
       notches: [],
       thin: true,
     },
-  },
+  ],
 
   reflectors: [
     {

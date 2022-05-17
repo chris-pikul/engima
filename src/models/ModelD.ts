@@ -21,20 +21,23 @@ const ModelD:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'LPGSZMHAEOQKVXRFYBUTNICJDW',
       notches: [ 'G' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'SLVGBTFXJQOHEWIRZYAMKPCNDU',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'CJGDPSHKTURAWZXFMYNQOBVLIE',
       notches: [ 'V' ],
     },
-  },
+  ],
 
   reflectors: [
     {

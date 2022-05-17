@@ -15,6 +15,11 @@
 export interface ModelWheel {
 
   /**
+   * Displayable string identifying this wheel
+   */
+  label:string;
+
+  /**
    * Alphabet for the wiring of the wheel as it compares to the general model
    * wheel.
    */
@@ -97,7 +102,7 @@ export interface Model {
   /**
    * Available wheels for this Model.
    */
-  wheels:Record<string, ModelWheel>;
+  wheels:Array<ModelWheel>;
 
   /**
    * Available reflectors for this Model.

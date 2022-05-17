@@ -25,20 +25,23 @@ export const ModelK:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'LPGSZMHAEOQKVXRFYBUTNICJDW',
       notches: [ 'G' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'SLVGBTFXJQOHEWIRZYAMKPCNDU',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'CJGDPSHKTURAWZXFMYNQOBVLIE',
       notches: [ 'V' ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -57,20 +60,23 @@ export const ModelKSwiss:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'PEZUOHXSCVFMTBGLRINQJWAYDK',
       notches: [ 'G' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'ZOUESYDKFWPCIQXHMVBLGNJRAT',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'EHRVXGAOBQUSIMZFLYNWKTPDJC',
       notches: [ 'V' ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -91,8 +97,9 @@ export const ModelKD:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'VEZIOJCXKYDUNTWAPLQGBHSFMR',
       notches: [
         'A',
@@ -106,7 +113,8 @@ export const ModelKD:Model = {
         'Y',
       ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'HGRBSJZETDLVPMQYCXAOKINFUW',
       notches: [
         'A',
@@ -120,7 +128,8 @@ export const ModelKD:Model = {
         'Y',
       ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'NWLHXGRBYOJSAZDVTPKFQMEUIC',
       notches: [
         'A',
@@ -134,7 +143,7 @@ export const ModelKD:Model = {
         'Y',
       ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -160,20 +169,23 @@ export const ModelKRailway:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'EVLPKUDJHTGSZFRABWYICOXNMQ',
       notches: [ 'G' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'HXMQKGJTSCZFLBERNAWYIDOVPU',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'JHDBSKYPZNMVXURECLIGQOAWTF',
       notches: [ 'V' ],
     },
-  },
+  ],
 
   reflectors: [
     {

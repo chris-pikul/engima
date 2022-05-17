@@ -21,20 +21,23 @@ const ModelA133:Model = {
 
   alphabet: Alphabet28,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'PSBGÖXQJDHOÄUCFRTEZVÅINLYMKA',
       notches: [ 'G' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'CHNSYÖADMOTRZXBÄIGÅEKQUPFLVJ',
       notches: [ 'G' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'ÅVQIAÄXRJBÖZSPCFYUNTHDOMEKGL',
       notches: [ 'G' ],
     },
-  },
+  ],
 
   reflectors: [
     {

@@ -28,8 +28,9 @@ export const ModelA28:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'LPGSZMHAEOQKVXRFYBUTNICJDW',
       notches: [
         'A',
@@ -51,7 +52,8 @@ export const ModelA28:Model = {
         'Y',
       ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'SLVGBTFXJQOHEWIRZYAMKPCNDU',
       notches: [
         'A',
@@ -71,7 +73,8 @@ export const ModelA28:Model = {
         'Y',
       ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'CJGDPSHKTURAWZXFMYNQOBVLIE',
       notches: [
         'C',
@@ -87,7 +90,7 @@ export const ModelA28:Model = {
         'Z',
       ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -109,8 +112,9 @@ export const ModelG312:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'DMTWSILRUYQNKFEJCAZBPGXOHV',
       notches: [
         'A',
@@ -132,7 +136,8 @@ export const ModelG312:Model = {
         'Y',
       ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'HQZGPJTMOBLNCIFDYAWVEUSRKX',
       notches: [
         'A',
@@ -152,7 +157,8 @@ export const ModelG312:Model = {
         'Y',
       ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'UQNTLSZFMREHDPXKIBVYGJCWOA',
       notches: [
         'C',
@@ -168,7 +174,7 @@ export const ModelG312:Model = {
         'Z',
       ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -190,8 +196,9 @@ export const ModelG260:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'RCSPBLKQAUMHWYTIFZVGOJNEXD',
       notches: [
         'A',
@@ -213,7 +220,8 @@ export const ModelG260:Model = {
         'Y',
       ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'WCMIBVPJXAROSGNDLZKEYHUFQT',
       notches: [
         'A',
@@ -233,7 +241,8 @@ export const ModelG260:Model = {
         'Y',
       ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'FVDHZELSQMAXOKYIWPGCBUJTNR',
       notches: [
         'C',
@@ -249,7 +258,7 @@ export const ModelG260:Model = {
         'Z',
       ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -270,8 +279,9 @@ export const ModelG111:Model = {
 
   alphabet: AlphabetQWERTZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'WLRHBQUNDKJCZSEXOTMAGYFPVI',
       notches: [
         'A',
@@ -293,7 +303,8 @@ export const ModelG111:Model = {
         'Y',
       ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'TFJQAZWMHLCUIXRDYGOEVBNSKP',
       notches: [
         'A',
@@ -313,7 +324,8 @@ export const ModelG111:Model = {
         'Y',
       ],
     },
-    V: {
+    {
+      label: 'III',
       wiring: 'QTPIXWVDFRMUSLJOHCANEZKYBG',
       notches: [
         'A',
@@ -325,7 +337,7 @@ export const ModelG111:Model = {
         'Y',
       ],
     },
-  },
+  ],
 
   reflectors: [
     {

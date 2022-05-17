@@ -29,20 +29,23 @@ export const ModelZ:Model = {
 
   alphabet: AlphabetZ,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: '6418270359',
       notches: [ '2' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: '5841097632',
       notches: [ '2' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: '3581620794',
       notches: [ '2' ],
     },
-  },
+  ],
 
   reflectors: [
     {

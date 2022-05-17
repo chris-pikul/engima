@@ -26,28 +26,33 @@ const ModelI:Model = {
 
   alphabet: AlphabetABC,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'EKMFLGDQVZNTOWYHXUSPAIBRCJ',
       notches: [ 'Y' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'AJDKSIRUXBLHWTMCQGZNPYFVOE',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'BDFHJLCPRTXVZNYEIWGAKMUSQO',
       notches: [ 'D' ],
     },
-    IV: {
+    {
+      label: 'IV',
       wiring: 'ESOVPZJAYQUIRHXLNFTGKDCMWB',
       notches: [ 'R' ],
     },
-    V: {
+    {
+      label: 'V',
       wiring: 'VZBRGITYUPSDNHLXAWMJQOFECK',
       notches: [ 'H' ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -80,28 +85,33 @@ export const Norway:Model = {
 
   alphabet: AlphabetABC,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'WTOKASUYVRBXJHQCPZEFMDINLG',
       notches: [ 'Y' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'GJLPUBSWEMCTQVHXAOFZDRKYNI',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'JWFMHNBPUSDYTIXVZGRQLAOEKC',
       notches: [ 'D' ],
     },
-    IV: {
+    {
+      label: 'IV',
       wiring: 'FGZJMVXEPBWSHQTLIUDYKCNRAO',
       notches: [ 'R' ],
     },
-    V: {
+    {
+      label: 'V',
       wiring: 'HEJXQOTZBVFDASCILWPGYNMURK',
       notches: [ 'H' ],
     },
-  },
+  ],
 
   reflectors: [
     {
@@ -122,20 +132,23 @@ export const Sonder:Model = {
 
   alphabet: AlphabetABC,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'VEOSIRZUJDQCKGWYPNXAFLTHMB',
       notches: [ 'Y' ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'UEMOATQLSHPKCYFWJZBGVXINDR',
       notches: [ 'M' ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'TZHXMBSIPNURJFDKEQVCWGLAOY',
       notches: [ 'D' ],
     },
-  },
+  ],
 
   reflectors: [
     {

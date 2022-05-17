@@ -29,8 +29,9 @@ export const ModelT:Model = {
   alphabet: AlphabetQWERTZ,
   stator: AlphabetTirpitz,
 
-  wheels: {
-    I: {
+  wheels: [
+    {
+      label: 'I',
       wiring: 'KPTYUELOCVGRFQDANJMBSWHZXI',
       notches: [
         'E',
@@ -40,7 +41,8 @@ export const ModelT:Model = {
         'Y',
       ],
     },
-    II: {
+    {
+      label: 'II',
       wiring: 'UPHZLWEQMTDJXCAKSOIGVBYFNR',
       notches: [
         'E',
@@ -50,7 +52,8 @@ export const ModelT:Model = {
         'Z',
       ],
     },
-    III: {
+    {
+      label: 'III',
       wiring: 'QUDLYRFEKONVZAXWHMGPJBSICT',
       notches: [
         'E',
@@ -60,7 +63,8 @@ export const ModelT:Model = {
         'Y',
       ],
     },
-    IV: {
+    {
+      label: 'IV',
       wiring: 'CIWTBKXNRESPFLYDAGVHQUOJZM',
       notches: [
         'E',
@@ -70,7 +74,8 @@ export const ModelT:Model = {
         'Z',
       ],
     },
-    V: {
+    {
+      label: 'V',
       wiring: 'UAXGISNJBVERDYLFZWTPCKOHMQ',
       notches: [
         'G',
@@ -80,7 +85,8 @@ export const ModelT:Model = {
         'Z',
       ],
     },
-    VI: {
+    {
+      label: 'VI',
       wiring: 'XFUZGALVHCNYSEWQTDMRBKPIOJ',
       notches: [
         'F',
@@ -90,7 +96,8 @@ export const ModelT:Model = {
         'Y',
       ],
     },
-    VII: {
+    {
+      label: 'VII',
       wiring: 'BJVFTXPLNAYOZIKWGDQERUCHSM',
       notches: [
         'G',
@@ -100,7 +107,8 @@ export const ModelT:Model = {
         'Z',
       ],
     },
-    VIII: {
+    {
+      label: 'VIII',
       wiring: 'YMTPNZHWKODAJXELUQVGCBISFR',
       notches: [
         'F',
@@ -110,7 +118,7 @@ export const ModelT:Model = {
         'Y',
       ],
     },
-  },
+  ],
 
   reflectors: [
     {
