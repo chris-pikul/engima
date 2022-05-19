@@ -35,6 +35,21 @@ import { getWiring } from '../alphabet';
  */
 export class Reflector implements IEncodable, IRotatable, IValidatable {
   /**
+   * Copies the settings from one Reflector into a new one
+   * 
+   * @param refl Input Reflector object
+   * @returns New Reflector object
+   */
+  public static clone(refl:Reflector):Reflector {
+    return new Reflector(
+      refl.label,
+      refl.numCharacters,
+      refl.wiring,
+      refl.moving,
+    );
+  }
+
+  /**
    * Creates a new Reflector object based on given data models
    * 
    * @param model Parent data model for the Enigma that uses this
