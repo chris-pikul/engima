@@ -20,8 +20,9 @@ import Stator from './components/Stator';
 import Reflector from './components/Reflector';
 import Wheel from './components/Wheel';
 import { Model } from './models';
+import IValidatable from './interfaces/IValidatable';
 
-export class Enigma {
+export class Enigma implements IValidatable {
   /**
    * Displayable string identifying the model of this Enigma
    */
@@ -78,13 +79,14 @@ export class Enigma {
   /**
    * Creates a new Enigma kit.
    * 
-   * @param arg Either a string label, or a Model to copy from
+   * @param model A given Model object describing the settings of this Enigma
    */
   constructor(model:Model) {
     // Bind methods
     this.installWheel = this.installWheel.bind(this);
     this.installReflector = this.installReflector.bind(this);
     this.installPlugboard = this.installPlugboard.bind(this);
+    this.validate = this.validate.bind(this);
 
     // Apply properties
     if(model.label.length === 0)
@@ -175,6 +177,15 @@ export class Enigma {
       this.alphabet.length,
       plugs,
     );
+  }
+
+  /**
+   * Validates the settings of the machine.
+   * 
+   * @returns Array of Errors if any where found
+   */
+  public validate():Array<Error> {
+    return this.#machine.validate();
   }
 }
 export default Enigma;
