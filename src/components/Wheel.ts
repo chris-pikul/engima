@@ -297,12 +297,15 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
    * (0-based indice)
    * @param startingPosition (Grundstellung) Numerical starting position for the
    * wheel. (0-based indice)
+   * @returns `this` for method chaining
    */
-  public setup(ringSetting:number, startingPosition:number):void {
+  public setup(ringSetting:number, startingPosition:number):Wheel {
     this.#ringSetting = circular(ringSetting, this.numCharacters);
     this.#startingPosition = circular(startingPosition, this.numCharacters);
     this.#position = this.startingPosition;
     this.#init = true;
+
+    return this;
   }
 
   /**
