@@ -71,7 +71,7 @@ export class Plugboard implements IEncodable, IValidatable {
    * plugs = [ [0,2], [1, 2], [4, 5] ]; // BAD, 2 is duplicated
    * ```
    */
-  readonly plugs:Array<PlugWire>;
+  plugs:Array<PlugWire> = [];
 
   /**
    * Creates a Plugboard.
@@ -90,6 +90,7 @@ export class Plugboard implements IEncodable, IValidatable {
    */
   constructor(label:string, numChars:number, plugs?:Array<PlugWire>) {
     // Bind methods
+    this.reset = this.reset.bind(this);
     this.encode = this.encode.bind(this);
     this.validate = this.validate.bind(this);
     this.addPlug = this.addPlug.bind(this);
@@ -105,6 +106,13 @@ export class Plugboard implements IEncodable, IValidatable {
 
     // Number of plugs is optional, more validation later in validate()
     this.plugs = plugs ?? [];
+  }
+
+  /**
+   * Resets any settings applied to the plugboard
+   */
+  public reset():void {
+    this.plugs = [];
   }
 
   /**
