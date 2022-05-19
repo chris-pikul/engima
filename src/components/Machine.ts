@@ -49,7 +49,7 @@ export class Machine implements IValidatable {
   /**
    * The Plugboard component, if present on this model.
    */
-  readonly plugboard?:Plugboard;
+  plugboard:(null | Plugboard) = null;
 
   /**
    * The entry wheel, or Entrittswalze (ETW) which performs the first step of
@@ -57,7 +57,7 @@ export class Machine implements IValidatable {
    * is used to map back after the wheels encoding for processing back through
    * to output.
    */
-  readonly entryWheel:Stator;
+  entryWheel:Stator;
 
   /**
    * The configuration of wheels, or rotors, used for encoding between the
@@ -70,18 +70,13 @@ export class Machine implements IValidatable {
    * is the rightmost, or considered the first wheel. In this array, the first
    * index (0) is the right-most wheel; being first and last to encode.
    */
-  readonly wheels:Array<Wheel>;
+  wheels:Array<Wheel> = [];
 
   /**
    * The reflector, or Umkehrwalze (UKW), that's used in the wheel/rotor
    * assembly.
    */
-  readonly reflector:Reflector;
-
-  /**
-   * Has this machine been initialized (setup)?
-   */
-  #init = false;
+  reflector:(null | Reflector) = null;
 
   /**
    * Creates a new Machine
@@ -92,7 +87,7 @@ export class Machine implements IValidatable {
    * @param ukw Reflector object
    * @param plugboard Optional Plugboard object
    */
-  constructor(label:string, alphabet:string, etw:Stator, wheels:Array<Wheel>, ukw:Reflector, plugboard?:Plugboard) {
+  constructor(label:string, alphabet:string, etw:Stator, wheels?:Array<Wheel>, ukw?:Reflector, plugboard?:Plugboard) {
     // Bind Methods
     this.processCharacter = this.processCharacter.bind(this);
     this.processMessage = this.processMessage.bind(this);
@@ -112,19 +107,29 @@ export class Machine implements IValidatable {
       throw new TypeError(`Machine constructed with an invalid 'etw' parameter [2].`);
     this.entryWheel = etw;
 
-    if(!wheels || Array.isArray(wheels) === false)
-      throw new TypeError(`Machine constructed with an invalid 'wheels' parameter [3].`);
-    this.wheels = [];
+    this.wheels = [ ...(wheels ?? []) ];
 
-    if((ukw instanceof Reflector) === false)
-      throw new TypeError(`Machine constructed with an invalid 'ukw' parameter [4]`);
-    this.reflector = ukw;
+    if(ukw) {
+      if((ukw instanceof Reflector) === false)
+        throw new TypeError(`Machine constructed with an invalid 'ukw' parameter [4]`);
+    
+      this.reflector = ukw;
+    }
 
     if(plugboard) {
       if((plugboard instanceof Plugboard) === false)
         throw new TypeError(`Machine constructed with an invalid 'plugboard' parameter [5]`);
       this.plugboard = plugboard;
     }
+  }
+
+  /**
+   * Resets the state of this machine and strips any components installed.
+   */
+  public reset():void {
+    this.plugboard = null;
+    this.reflector = null;
+    this.wheels = [];
   }
 
   /**
@@ -148,6 +153,10 @@ export class Machine implements IValidatable {
    * @returns New character
    */
   public processCharacter(char:string, spaceAs = 'X', unknownAs = 'X'):string {
+    // Ensure we have any required parts
+    if(!this.reflector)
+      throw new Error(`Machine "${this.label}" does not have a reflector installed.`);
+    
     // Normalize the character
     let input = char[0].toUpperCase();
 
@@ -260,9 +269,13 @@ export class Machine implements IValidatable {
     }).flat());
 
     // Check the reflector
-    if(this.reflector.numCharacters !== this.numCharacters)
-      errs.push(new Error(`Machine "${this.label}" has an invalid reflector (UKW), the number of characters does not match.`));
-    errs.push(...this.reflector.validate());
+    if(this.reflector) {
+      if(this.reflector.numCharacters !== this.numCharacters)
+        errs.push(new Error(`Machine "${this.label}" has an invalid reflector (UKW), the number of characters does not match.`));
+      errs.push(...this.reflector.validate());
+    } else {
+      errs.push(new Error(`Machine "${this.label}" does not have a Reflector installed.`));
+    }
 
     // Check the plugboard if we have one
     if(this.plugboard) {
