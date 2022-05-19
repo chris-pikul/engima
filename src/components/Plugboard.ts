@@ -92,6 +92,7 @@ export class Plugboard implements IEncodable, IValidatable {
     // Bind methods
     this.encode = this.encode.bind(this);
     this.validate = this.validate.bind(this);
+    this.addPlug = this.addPlug.bind(this);
 
     // Apply the readonly properties
     if(label.length < 1)
@@ -157,9 +158,12 @@ export class Plugboard implements IEncodable, IValidatable {
 
     // Check for out-of-range plug values
     for(let ind = 0; ind < this.plugs.length; ind++) {
-      const plg = this.plugs[ind];
-      if(plg[0] < 0 || plg[0] >= this.numCharacters || plg[1] < 0 || plg[1] >= this.numCharacters)
+      const [ from, to ] = this.plugs[ind];
+      if(from < 0 || from >= this.numCharacters || to < 0 || to >= this.numCharacters)
         errs.push(new Error(`Plugboard.plug[${ind}] has a value out of range for this plugboard`));
+
+      if(from === to)
+        errs.push(new Error(`Plugboard.plug[${ind}] has the same values for both points`));
     }
 
     // Find any duplicate entries ANYWHERE in the entire scope of the plugs
@@ -168,6 +172,37 @@ export class Plugboard implements IEncodable, IValidatable {
     errs.push(...dupErrs);
     
     return errs;
+  }
+
+  /**
+   * Attempts to add a plug connection to the plugboard connecting two
+   * characters based on their index.
+   * 
+   * @param fromIndex Character index
+   * @param toIndex Character index
+   * @returns Error if something conflicts
+   */
+  public addPlug(fromIndex:number, toIndex:number):(undefined | Error) {
+    // Validate indices
+    if(fromIndex < 0 || fromIndex >= this.numCharacters)
+      return new Error(`Plugboard.addPlug received out-of-range "fromIndex" "${fromIndex}".`);
+
+    if(toIndex < 0 || toIndex >= this.numCharacters)
+      return new Error(`Plugboard.addPlug received out-of-range "toIndex" "${toIndex}".`);
+
+    if(fromIndex === toIndex)
+      return new Error(`Plugboard.addPlug cannot have the same index for both parameters.`);
+
+    const conflict = this.plugs.findIndex(([ from, to ]) => (
+      from === fromIndex ||
+      from === toIndex ||
+      to === fromIndex ||
+      to === toIndex
+    ));
+    if(conflict >= 0)
+      return new Error(`Plugboard.addPlug attempting to add a plug that conflicts with plug[${conflict}].`);
+
+    this.plugs.push([ fromIndex, toIndex ]);
   }
 }
 export default Plugboard;
