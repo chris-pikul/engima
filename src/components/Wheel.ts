@@ -35,6 +35,24 @@ import { getWiring } from '../alphabet';
  */
 export class Wheel implements IEncodable, IRotatable, IValidatable {
   /**
+   * Copies the properties from a given Wheel into a new Wheel object.
+   * 
+   * Does NOT copy the settings such as `ringSetting` or `startingPosition`.
+   * 
+   * @param wheel Input Wheel to clone
+   * @returns New Wheel object
+   */
+  public static clone(wheel:Wheel):Wheel {
+    return new Wheel(
+      wheel.label,
+      wheel.numCharacters,
+      wheel.ringDisplay,
+      wheel.wiring,
+      wheel.notches,
+    );
+  }
+
+  /**
    * Creates a new Wheel object based on provided data models.
    * 
    * @param model Parent data model for the Enigma this belongs to
