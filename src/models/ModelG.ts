@@ -28,6 +28,7 @@ export const ModelA28:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -112,6 +113,7 @@ export const ModelG312:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -196,6 +198,7 @@ export const ModelG260:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -279,6 +282,7 @@ export const ModelG111:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',

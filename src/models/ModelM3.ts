@@ -31,6 +31,7 @@ export const ModelM3:Model = {
 
   alphabet: AlphabetABC,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',

@@ -29,6 +29,7 @@ export const ModelZ:Model = {
 
   alphabet: AlphabetZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',

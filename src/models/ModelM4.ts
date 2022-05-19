@@ -27,6 +27,7 @@ export const ModelM4:Model = {
 
   alphabet: AlphabetABC,
 
+  wheelCount: 4,
   wheels: [
     {
       label: 'I',

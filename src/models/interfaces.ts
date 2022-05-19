@@ -106,6 +106,11 @@ export interface Model {
   stator?:string;
 
   /**
+   * Number of wheels required for this model to operate
+   */
+  wheelCount:number;
+
+  /**
    * Available wheels for this Model.
    */
   wheels:Array<ModelWheel>;

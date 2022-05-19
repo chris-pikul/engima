@@ -25,6 +25,7 @@ export const ModelK:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -60,6 +61,7 @@ export const ModelKSwiss:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -97,6 +99,7 @@ export const ModelKD:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -169,6 +172,7 @@ export const ModelKRailway:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',

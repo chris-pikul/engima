@@ -21,6 +21,7 @@ const ModelA133:Model = {
 
   alphabet: Alphabet28,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',

@@ -21,6 +21,7 @@ const ModelD:Model = {
 
   alphabet: AlphabetQWERTZ,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',

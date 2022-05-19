@@ -29,6 +29,7 @@ export const ModelT:Model = {
   alphabet: AlphabetQWERTZ,
   stator: AlphabetTirpitz,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',

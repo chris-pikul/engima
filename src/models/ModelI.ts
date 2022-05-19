@@ -26,6 +26,7 @@ const ModelI:Model = {
 
   alphabet: AlphabetABC,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -85,6 +86,7 @@ export const Norway:Model = {
 
   alphabet: AlphabetABC,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
@@ -132,6 +134,7 @@ export const Sonder:Model = {
 
   alphabet: AlphabetABC,
 
+  wheelCount: 3,
   wheels: [
     {
       label: 'I',
