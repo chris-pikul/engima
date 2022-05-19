@@ -148,21 +148,16 @@ export class Machine implements IValidatable {
    * ```
    * 
    * @param char Input character to encode
-   * @param spaceAs Convert spaces to this character
    * @param unknownAs Fallback for any unknown characters
    * @returns New character
    */
-  public processCharacter(char:string, spaceAs = 'X', unknownAs = 'X'):string {
+  public processCharacter(char:string, unknownAs = 'X'):string {
     // Ensure we have any required parts
     if(!this.reflector)
       throw new Error(`Machine "${this.label}" does not have a reflector installed.`);
     
     // Normalize the character
-    let input = char[0].toUpperCase();
-
-    // Check if it is a white-space character
-    if(input === ' ' || input === '\t' || input === '\n')
-      input = spaceAs;
+    const input = char[0].toUpperCase();
 
     // Ensure the input is a single character
     if(input.length === 0 || input.length > 1)
@@ -230,16 +225,15 @@ export class Machine implements IValidatable {
    * Note: This does not perform message formatting and will convert 1-to-1.
    * 
    * @param msg String message to encode
-   * @param spaceAs Converts white-space to this character
    * @param unknownAs Fallback for any unknown characters
    * @returns New string of encoded characters
    */
-  public processMessage(msg:string, spaceAs = 'X', unknownAs = 'X'):string {
+  public processMessage(msg:string, unknownAs = 'X'):string {
     if(msg.length === 0)
       return msg;
 
     return msg.split('')
-      .map(char => this.processCharacter(char, spaceAs, unknownAs))
+      .map(char => this.processCharacter(char, unknownAs))
       .join('');
   }
 
