@@ -21,6 +21,14 @@ import Reflector from './components/Reflector';
 import Wheel from './components/Wheel';
 import { Model } from './models';
 import IValidatable from './interfaces/IValidatable';
+import {
+  FormatSubstitutions,
+  FormattingStandard,
+  postFormatDecoding,
+  postFormatEncoding,
+  preFormatDecoding,
+  preFormatEncoding,
+} from './format';
 
 export class Enigma implements IValidatable {
   /**
@@ -87,6 +95,9 @@ export class Enigma implements IValidatable {
     this.installReflector = this.installReflector.bind(this);
     this.installPlugboard = this.installPlugboard.bind(this);
     this.validate = this.validate.bind(this);
+    this.encode = this.encode.bind(this);
+    this.encodeMessage = this.encodeMessage.bind(this);
+    this.decodeMessage = this.decodeMessage.bind(this);
 
     // Apply properties
     if(model.label.length === 0)
@@ -186,6 +197,58 @@ export class Enigma implements IValidatable {
    */
   public validate():Array<Error> {
     return this.#machine.validate();
+  }
+
+  /**
+   * Encodes a single character using the current machine as it is setup.
+   * 
+   * Will perform any mechanical operations needed, but does NOT do formatting.
+   * 
+   * @param char Input character
+   * @param unknownAs Fallback character for unsupported characters
+   * @returns New character
+   */
+  public encode(char:string, unknownAs = 'X'):string {
+    if(char.length === 0)
+      return '';
+    
+    // Ensure single character
+    if(char.length > 1)
+      throw new Error(`Enigma.encode recieved a character longer than 1.`);
+
+    return this.#machine.processCharacter(char, unknownAs);
+  }
+
+  /**
+   * Encodes an entire string message using the current machine as it is setup.
+   * 
+   * Will perform formatting for the message to adhere to standard Enigma
+   * operating procedures.
+   * 
+   * @param msg Input string
+   * @param subs Formatting substitutions to use
+   * @param unknownAs Fallback character for unsupported characters
+   * @returns Formatted cipher text
+   */
+  public encodeMessage(msg:string, subs:FormatSubstitutions = FormattingStandard, unknownAs = 'X'):string {
+    const cipher = this.#machine.processMessage(preFormatEncoding(msg, subs), unknownAs);
+    return postFormatEncoding(cipher);
+  }
+
+  /**
+   * Decodes an entire string message using the current machine as it is setup.
+   * 
+   * Will perform formatting for the message to adhere to standard Enigma
+   * operating procedures.
+   * 
+   * @param msg Cipher text
+   * @param subs Formatting substitutions to use
+   * @param unknownAs Fallback character for unsupported characters
+   * @returns Formatted plain-text
+   */
+  public decodeMessage(msg:string, subs:FormatSubstitutions = FormattingStandard, unknownAs = 'X'):string {
+    const plain = this.#machine.processMessage(preFormatDecoding(msg), unknownAs);
+    return postFormatDecoding(plain, subs);
   }
 }
 export default Enigma;
