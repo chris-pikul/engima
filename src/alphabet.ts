@@ -106,7 +106,7 @@ export function getCharacterFromIndex(alpha:string, index:number, unknownAs = 'X
  */
 export function getWiring(alpha:string, input:string, unknownAs = 'X'):Array<number> {
   if(input.length !== alpha.length)
-    throw new Error(`getWiring() called with mis-matched alphabet lengths.`);
+    throw new Error(`getWiring() called with mis-matched alphabet lengths. Alpha was "${alpha}", input was "${input}".`);
 
   return input.split('').map(char => getCharacterIndex(alpha, char, unknownAs));
 }
