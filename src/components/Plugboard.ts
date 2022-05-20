@@ -178,6 +178,11 @@ export class Plugboard implements IEncodable, IValidatable {
     const dupErrs:Array<Error> = findTupleDuplicates<number>(this.plugs)
       .map(([ ind, val ]) => new Error(`Plugboard.plug[${ind}] has a duplicate value '${val}'`));
     errs.push(...dupErrs);
+
+    // Check that we don't have more wires then we can handle.
+    const maxPlugs = Math.floor(this.numCharacters * 0.5);
+    if(this.plugs.length > maxPlugs)
+      errs.push(new Error(`Plugboard contains more plugs "${this.plugs.length}" than can be supported "${maxPlugs}".`));
     
     return errs;
   }
