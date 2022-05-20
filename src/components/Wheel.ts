@@ -21,7 +21,7 @@ import {
   findOutOfRanges,
 } from '../common';
 
-import { getWiring } from '../alphabet';
+import { getCharacterIndex, getWiring } from '../alphabet';
 
 /**
  * Represents the Wheel, or "Rotor" of the Enigma machine.
@@ -65,7 +65,7 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
       model.alphabet.length,
       wheel.display ?? model.alphabet.split(''),
       getWiring(model.alphabet, wheel.wiring),
-      getWiring(model.alphabet, wheel.notches.join('')),
+      wheel.notches.map(char => getCharacterIndex(model.alphabet, char)),
     );
   }
 
@@ -193,6 +193,7 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
    */
   constructor(label:string, numChars:number, display?:Array<string>, wiring?:Array<number>, notches?:Array<number>) {
     // Bind methods
+    this.reset = this.reset.bind(this);
     this.setup = this.setup.bind(this);
     this.encode = this.encode.bind(this);
     this.advance = this.advance.bind(this);
@@ -287,6 +288,13 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
    */
   get atNotch():boolean {
     return this.notches.includes(this.position);
+  }
+
+  /**
+   * Resets this wheel back to it's starting position
+   */
+  public reset():void {
+    this.#position = this.#startingPosition;
   }
 
   /**

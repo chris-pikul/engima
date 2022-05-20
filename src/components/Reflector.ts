@@ -148,6 +148,7 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
    */
   constructor(label:string, numChars:number, wiring:Array<number>, moving = false) {
     // Bind methods
+    this.reset = this.reset.bind(this);
     this.setup = this.setup.bind(this);
     this.encode = this.encode.bind(this);
     this.advance = this.advance.bind(this);
@@ -205,6 +206,13 @@ export class Reflector implements IEncodable, IRotatable, IValidatable {
    */
   get isSetup():boolean {
     return this.#init;
+  }
+
+  /**
+   * Resets this Reflector back to it's starting position
+   */
+  public reset():void {
+    this.#position = this.#startingPosition;
   }
 
   /**

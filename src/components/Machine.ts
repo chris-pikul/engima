@@ -124,12 +124,11 @@ export class Machine implements IValidatable {
   }
 
   /**
-   * Resets the state of this machine and strips any components installed.
+   * Resets the state of this machine back to the starting settings
    */
   public reset():void {
-    this.plugboard = null;
-    this.reflector = null;
-    this.wheels = [];
+    this.wheels.forEach(whl => whl.reset());
+    this.reflector?.reset();
   }
 
   /**
@@ -175,14 +174,20 @@ export class Machine implements IValidatable {
 
     /*
      * Advance the wheels. The right-most [0] wheel always advances, the rest
-     * only advance if they are at the notch position. The notch consideration
+     * only advance if the wheel to their right (lower in the index) is at the
+     * notch position. In other words wheel[i>0] rotates if wheel[i-1] is at
+     * their notch position. 
+     * 
+     * The notch consideration
      * is done regardless of any wheel movements that have happened in this
      * loop already.
      * 
      * After advancement, perform the encoding on the character
      */
     this.wheels.forEach((whl:Wheel, ind:number) => {
-      if(ind === 0 || whl.atNotch)
+      if(ind === 0)
+        whl.advance();
+      else if(this.wheels[ind - 1].atNotch)
         whl.advance();
 
       index = whl.encode(index);
