@@ -8,6 +8,8 @@
  * 
  * Utility functions for formatting messages into a standard policy generally
  * used for Enigma machines.
+ * 
+ * @todo Some models encode in blocks of 4, some in blocks of 5.
  */
 
 /**

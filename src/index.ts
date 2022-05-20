@@ -15,5 +15,4 @@ export * from './components/Reflector';
 export * from './components/Stator';
 export * from './components/Wheel';
 
-// Alias Machine => Enigma for ease of use
-export { default as Enigma } from './components/Machine';
+export { default as Enigma } from './Enigma';
