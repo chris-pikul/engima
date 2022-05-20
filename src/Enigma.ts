@@ -91,6 +91,7 @@ export class Enigma implements IValidatable {
    */
   constructor(model:Model) {
     // Bind methods
+    this.reset = this.reset.bind(this);
     this.installWheel = this.installWheel.bind(this);
     this.installReflector = this.installReflector.bind(this);
     this.installPlugboard = this.installPlugboard.bind(this);
@@ -133,6 +134,21 @@ export class Enigma implements IValidatable {
       this.alphabet,
       new Stator(this.label, stator.length, getWiring(this.alphabet, stator)),
     );
+
+    // If only one UKW is available, just install it now.
+    if(this.reflectors.length === 1)
+      this.#machine.reflector = Reflector.clone(this.reflectors[0]);
+  }
+
+  get machine():Machine {
+    return this.#machine;
+  }
+
+  /**
+   * Resets the machine back to it's initial starting conditions
+   */
+  public reset():void {
+    this.#machine.reset();
   }
 
   /**
@@ -147,7 +163,7 @@ export class Enigma implements IValidatable {
    * @param startingPosition Starting-position (Grundstellung) to apply
    * @returns Error if any prevent the installation
    */
-  public installWheel(label:string, ringSetting:number, startingPosition:number):(undefined | Error) {
+  public installWheel(label:string, ringSetting = 0, startingPosition = 0):(undefined | Error) {
     if(this.#machine.wheels.length >= this.wheelCount)
       return new Error(`Enigma "${this.label}" already has the maximum number of wheels installed.`);
 
