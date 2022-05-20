@@ -21,7 +21,7 @@ import { AlphabetABC } from '../alphabet';
  * Standard German Military issue Model I Enigma. Used by the Wehrmacht and the
  * Luftwaffe, it is sometimes referred to as the Services Enigma.
  */
-const ModelI:Model = {
+export const ModelI:Model = {
   label: 'I (Wehrmacht/Luftwaffe)',
 
   alphabet: AlphabetABC,
