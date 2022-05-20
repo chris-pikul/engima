@@ -65,7 +65,7 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
       model.alphabet.length,
       wheel.display ?? model.alphabet.split(''),
       getWiring(model.alphabet, wheel.wiring),
-      wheel.notches.map(char => getCharacterIndex(model.alphabet, char)),
+      wheel.notches.map(char => getCharacterIndex(char, model.alphabet)),
     );
   }
 

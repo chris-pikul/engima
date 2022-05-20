@@ -1,5 +1,6 @@
 // test src/components/Stator.ts
 import { expect } from 'chai';
+import { AlphabetABC, AlphabetQWERTZ, getCharacterFromIndex, getCharacterIndex, getWiring } from '../../src/alphabet';
 import Stator from '../../src/components/Stator';
 
 describe('Component - Stator', () => {
@@ -45,6 +46,17 @@ describe('Component - Stator', () => {
     it('returns an array of errors for any duplicate mappings', () => {
       const stator = new Stator('Test', 3, [1, 2, 1]);
       expect(stator.validate()).to.be.an('Array').with.lengthOf(1);
+    });
+  });
+
+  describe('Stator functionality', () => {
+    it('encodes single character correctly (Model D example)', () => {
+      const etw = new Stator('Test', AlphabetQWERTZ.length, getWiring(AlphabetQWERTZ));
+
+      const ltr = getCharacterIndex('a');
+      const enc = etw.encode(ltr);
+      const encChar = getCharacterFromIndex(enc);
+      expect(encChar, 'etw encode').to.equal('J');
     });
   });
 });

@@ -20,6 +20,7 @@ export const ModelD:Model = {
   label: 'D (Commercial A26)',
 
   alphabet: AlphabetQWERTZ,
+  stator: 'JWULCMNOHPQZYXIRADKEGVBTSF',
 
   wheelCount: 3,
   wheels: [

@@ -212,7 +212,7 @@ export class Machine implements IValidatable {
       index = this.plugboard.encode(index);
 
     // Final output is ready, convert back to the alphabet
-    return getCharacterFromIndex(this.alphabet, index, unknownAs);
+    return getCharacterFromIndex(index, this.alphabet, unknownAs);
   }
 
   /**
