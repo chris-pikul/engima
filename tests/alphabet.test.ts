@@ -43,12 +43,34 @@ describe('Alphabet utilities', () => {
     it('produces output indices for input CBA', () => {
       expect(getWiring('CBA')).to.eql([2, 1, 0]);
     });
+
+    it('produces correct mapping for known 10-letter alpha', () => {
+      // This is mentally worked out and should be correct.
+      expect(getWiring('GIAJBEHCFD')).to.eql([
+        6,
+        8,
+        0,
+        9,
+        1,
+        4,
+        7,
+        2,
+        5,
+        3,
+      ]);
+    });
   });
 
   describe('wiringToAlphabet', () => {
     it('maps 1-to-1 and back with getWiring', () => {
       const wire = getWiring(AlphabetABC);
       expect(wiringToAlphabet(wire, AlphabetABC)).to.equal(AlphabetABC);
+    });
+
+    it('maps correctly using an arbitrary alphabet', () => {
+      const alpha = 'LPGSZMHAEOQKVXRFYBUTNICJDW';
+      const wire = getWiring(alpha);
+      expect(wiringToAlphabet(wire)).to.equal(alpha);
     });
   });
 });
