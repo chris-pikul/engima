@@ -134,6 +134,19 @@ export function getWiring(alpha:string, parent = AlphabetABC, unknownAs = 'X'):A
 }
 
 /**
+ * Converts an input alphabet string against a master alphabet. Resulting in
+ * correct indices for the master alphabet.
+ * 
+ * @param alphabet Input alphabet string
+ * @param master Master alphabet to apply the incoming alphabet against
+ * @returns Array of indices in which each input letter corresponds to the
+ * character index on `master`.
+ */
+export function alphabetToIndices(alphabet:string, master:string = AlphabetABC):Array<number> {
+  return alphabet.split('').map(char => master.indexOf(char));
+}
+
+/**
  * Converts a wiring array into a single string representing it as an alphabet.
  * This is the reverse of the `getWiring()` method. Since the `getWiring()`
  * function applies a given alphabet against a constant parent alphabet

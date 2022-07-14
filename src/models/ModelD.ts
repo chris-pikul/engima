@@ -14,13 +14,13 @@
 
 /* eslint-disable id-length */
 import type Model from './interfaces';
-import { AlphabetQWERTZ } from '../alphabet';
+import { AlphabetABC, AlphabetQWERTZ } from '../alphabet';
 
 export const ModelD:Model = {
   label: 'D (Commercial A26)',
 
-  alphabet: AlphabetQWERTZ,
-  stator: 'JWULCMNOHPQZYXIRADKEGVBTSF',
+  alphabet: AlphabetABC,
+  keyboard: AlphabetQWERTZ,
 
   wheelCount: 3,
   wheels: [

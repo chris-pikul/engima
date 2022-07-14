@@ -13,6 +13,7 @@
 
 import { getCharacterFromIndex, getCharacterIndex } from '../alphabet';
 import { forEachReverse } from '../common';
+import { Trace, TraceStep } from '../interfaces/debugging';
 import type IValidatable from '../interfaces/IValidatable';
 
 import Plugboard from './Plugboard';
@@ -150,27 +151,57 @@ export class Machine implements IValidatable {
    * @param unknownAs Fallback for any unknown characters
    * @returns New character
    */
-  public processCharacter(char:string, unknownAs = 'X'):string {
+  public processCharacter(char:string, unknownAs = 'X'):[string, Trace] {
     // Ensure we have any required parts
     if(!this.reflector)
       throw new Error(`Machine "${this.label}" does not have a reflector installed.`);
+
+    const trace:Trace = {
+      inputRaw: char,
+      steps: [],
+    };
     
     // Normalize the character
     const input = char[0].toUpperCase();
+    trace.inputChar = input;
 
     // Ensure the input is a single character
     if(input.length === 0 || input.length > 1)
       throw new Error(`Machine.encode() recieved a character that was either empty, or longer than 1 character.`);
 
     // Start by converting the character to the keyboard alphabet index
-    let index = getCharacterIndex(this.alphabet, input, unknownAs);
+    let index = getCharacterIndex(input, this.alphabet, unknownAs);
+    trace.inputIndex = index;
 
     // Use the plugboard if it's installed
-    if(this.plugboard)
+    if(this.plugboard) {
+      const trc:TraceStep = {
+        op: 'Encode',
+        component: 'Plugboard',
+        input: index,
+        inputChar: getCharacterFromIndex(index, this.alphabet, unknownAs),
+      };
+
       index = this.plugboard.encode(index);
-    
+
+      trc.output = index;
+      trc.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+      trace.steps.push(trc);
+    }
+
     // Use the Stator (ETW)
+    const statorTrcFirst:TraceStep = {
+      op: 'Encode',
+      component: 'Stator',
+      input: index,
+      inputChar: getCharacterFromIndex(index, this.alphabet, unknownAs),
+    };
+
     index = this.entryWheel.encode(index);
+
+    statorTrcFirst.output = index;
+    statorTrcFirst.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+    trace.steps.push(statorTrcFirst);
 
     /*
      * Advance the wheels. The right-most [0] wheel always advances, the rest
@@ -185,34 +216,109 @@ export class Machine implements IValidatable {
      * After advancement, perform the encoding on the character
      */
     this.wheels.forEach((whl:Wheel, ind:number) => {
-      if(ind === 0)
+      const trcAdv:TraceStep = { op: 'Wheel Advance' };
+
+      if(ind === 0) {
         whl.advance();
-      else if(this.wheels[ind - 1].atNotch)
+        trcAdv.msg = `First wheel "${whl.label}" now showing "${whl.visibleCharacter}"`;
+      } else if(this.wheels[ind - 1].atNotch) {
         whl.advance();
+        trcAdv.msg = `Wheel ${ind} "${whl.label}" because of notch on ${ind - 1} "${this.wheels[ind - 1].label}", now showing "${whl.visibleCharacter}"`;
+      } else {
+        trcAdv.msg = `Wheel ${ind} "${whl.label} did not advance, showing "${whl.visibleCharacter}"`;
+      }
+      trace.steps.push(trcAdv);
+
+      const trc:TraceStep = {
+        op: 'Encode',
+        component: `Wheel ${ind}`,
+        input: index,
+        inputChar: getCharacterFromIndex(index, this.alphabet, unknownAs),
+      };
 
       index = whl.encode(index);
+
+      trc.output = index;
+      trc.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+
+      trace.steps.push(trc);
     });
 
     // If the reflector is capable of moving, do so first
-    this.reflector.advance();
+    if(this.reflector.moving) {
+      trace.steps.push({
+        op: 'Reflector Advance',
+        msg: `Advancing reflector "${this.reflector.label}`,
+      });
+
+      this.reflector.advance();
+    }
 
     // Use the reflector next before passing back through the wheels in reverse.
+    const reflTrc:TraceStep = {
+      op: 'Encode',
+      component: 'Reflector',
+      input: index,
+      inputChar: getCharacterFromIndex(index, this.alphabet, unknownAs),
+    };
+
     index = this.reflector.encode(index);
 
+    reflTrc.output = index;
+    reflTrc.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+    trace.steps.push(reflTrc);
+
     // Go through the wheels, in reverse
-    forEachReverse<Wheel>(this.wheels, (whl:Wheel) => {
+    forEachReverse<Wheel>(this.wheels, (whl:Wheel, ind:number) => {
+      const trc:TraceStep = {
+        op: 'Encode Reverse',
+        component: `Wheel ${ind}`,
+        input: index,
+        inputChar: getCharacterFromIndex(index, this.alphabet, unknownAs),
+      };
+      
       index = whl.encode(index);
+
+      trc.output = index;
+      trc.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+      trace.steps.push(trc);
     });
 
     // Back out through the stator
+    const statorTrcLast:TraceStep = {
+      op: 'Encode Reverse',
+      component: 'Stator',
+      input: index,
+      inputChar: getCharacterFromIndex(index, this.alphabet, unknownAs),
+    };
+
     index = this.entryWheel.encode(index);
 
+    statorTrcLast.output = index;
+    statorTrcLast.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+    trace.steps.push(statorTrcLast);
+
     // If the plugboard is present, then use it
-    if(this.plugboard)
+    if(this.plugboard) {
+      const trc:TraceStep = {
+        op: 'Encode Reverse',
+        component: 'Plugboard',
+        input: index,
+        inputChar: getCharacterFromIndex(index, this.alphabet, unknownAs),
+      };
+
       index = this.plugboard.encode(index);
 
+      trc.output = index;
+      trc.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+      trace.steps.push(trc);
+    }
+
+    trace.outputIndex = index;
+    trace.outputChar = getCharacterFromIndex(index, this.alphabet, unknownAs);
+
     // Final output is ready, convert back to the alphabet
-    return getCharacterFromIndex(index, this.alphabet, unknownAs);
+    return [ getCharacterFromIndex(index, this.alphabet, unknownAs), trace ];
   }
 
   /**
@@ -233,13 +339,21 @@ export class Machine implements IValidatable {
    * @param unknownAs Fallback for any unknown characters
    * @returns New string of encoded characters
    */
-  public processMessage(msg:string, unknownAs = 'X'):string {
+  public processMessage(msg:string, unknownAs = 'X'):[string, Array<Trace>] {
     if(msg.length === 0)
-      return msg;
+      return [ msg, [] ];
 
-    return msg.split('')
-      .map(char => this.processCharacter(char, unknownAs))
+    const traces:Array<Trace> = [];
+
+    const results = msg.split('')
+      .map(char => {
+        const [ out, trace ] = this.processCharacter(char, unknownAs);
+        traces.push(trace);
+        return out;
+      })
       .join('');
+
+    return [ results, traces ];
   }
 
   /**

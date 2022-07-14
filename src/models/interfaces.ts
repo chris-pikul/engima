@@ -96,9 +96,15 @@ export interface Model {
   label:string;
 
   /**
-   * Keyboard alphabet as it maps from character 0..max.
+   * Master alphabet for wiring as it maps from character 0..max.
    */
   alphabet:string;
+
+  /**
+   * Keyboard alphabet as displayed, if not supplied, assumed to be the same as
+   * the `Model.alphabet` value.
+   */
+  keyboard?:string;
 
   /**
    * Stator wiring, specific if it is different from the input alphabet.

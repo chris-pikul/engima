@@ -1,12 +1,14 @@
 // test src/components/Wheel
 import { expect } from 'chai';
+import { AlphabetABC, alphabetToIndices, getCharacterIndex, getWiring, wiringToAlphabet } from '../../src/alphabet';
 import Wheel from '../../src/components/Wheel';
+import { ModelD } from '../../src/models';
 
 describe('Component - Wheel', () => {
   // Standard setup suite
-  const numChar = 5;
-  const disp = ['A','B','C','D','E'];
-  const wire = [4, 2, 0, 3, 1];
+  const numChar = AlphabetABC.length;
+  const disp = AlphabetABC.split('');
+  const wire = alphabetToIndices(AlphabetABC);
 
   describe('Wheel#constructor', () => {
     it('throws on empty label', () => {
@@ -40,8 +42,7 @@ describe('Component - Wheel', () => {
       expect(whl.isSetup, 'isSetup incorrect').to.be.true;
       
       // Check visibleCharacter while we are here.
-      // This is position+1 on the disp variable
-      expect(whl.visibleCharacter, 'visibleCharacter incorrect').to.equal(disp[3]);
+      expect(whl.visibleCharacter, 'visibleCharacter incorrect').to.equal(disp[2]);
     });
   });
 
@@ -53,9 +54,9 @@ describe('Component - Wheel', () => {
     });
 
     it('wraps an out-of-range indice', () => {
-      expect(whl.encode(10)).to.equal(wire[0]);
-      // 5 chars + -1 = indice 4 (because 0 based)
-      expect(whl.encode(-1)).to.equal(wire[4]);
+      expect(whl.encode(numChar)).to.equal(wire[0]);
+      // 26 chars + -1 = indice 25 (because 0 based)
+      expect(whl.encode(-1)).to.equal(wire[numChar - 1]);
     });
   });
 
@@ -75,7 +76,7 @@ describe('Component - Wheel', () => {
     });
 
     it('properly wraps values to within acceptable range', () => {
-      whl.position = 4;
+      whl.position = numChar - 1;
       whl.advance(2);
       expect(whl.position).to.equal(1);
     });
@@ -93,23 +94,50 @@ describe('Component - Wheel', () => {
     });
 
     it('catches duplicate wirings', () => {
-      const whl = new Wheel('T', numChar, disp, [0,1,2,3,3]);
+      const tst = wire.slice();
+      tst[1] = 0;
+      const whl = new Wheel('T', numChar, disp, tst);
       expect(whl.validate()).to.have.lengthOf(1);
     });
+  });
+
+  describe('Wheel.visibleCharacter', () => {
+    it('shows correctly on default settings', () => {
+      const whl = new Wheel('Test', numChar, disp, wire);
+      expect(whl.visibleCharacter).to.equal('A');
+    })
   });
 
   describe('functionality test', () => {
     const whl = new Wheel('Test', numChar, disp, wire);
 
     it('properly encodes the same indice differently after advancing', () => {
-      whl.setup(1, 2);
       const val1 = whl.encode(0);
-      expect(val1, 'first encoding').to.equal(wire[3]);
+      expect(val1, 'first encoding').to.equal(wire[0]);
 
       whl.advance();
       const val2 = whl.encode(0);
       expect(val2, 'second encoding equality').to.not.equal(val1);
-      expect(val2, 'second encoding value').to.equal(wire[4]);
+      expect(val2, 'second encoding value').to.equal(wire[1]);
+    });
+
+    it('generates wiring correctly', () => {
+      const whl = Wheel.fromModel(ModelD, ModelD.wheels[0]);
+      const wiring = alphabetToIndices(ModelD.wheels[0].wiring);
+      expect(whl.wiring, 'wiring generation mismatch').to.eql(wiring);
+
+      expect(wiringToAlphabet(wiring)).to.equal('LPGSZMHAEOQKVXRFYBUTNICJDW');
+    });
+
+    it('works as expected for a known wheel (Model D, wheel I)', () => {
+      const whl = Wheel.fromModel(ModelD, ModelD.wheels[0]);
+      expect(whl.label).to.equal('I');
+
+      const ltr = getCharacterIndex('E');
+
+      // Checking first wheel which advances first
+      whl.advance();
+      expect(whl.encode(ltr), wiringToAlphabet(whl.wiring)).to.equal(getCharacterIndex('M'));
     });
   });
 });

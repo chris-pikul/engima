@@ -29,6 +29,7 @@ import {
   preFormatDecoding,
   preFormatEncoding,
 } from './format';
+import { Trace } from './interfaces/debugging';
 
 export class Enigma implements IValidatable {
   /**
@@ -84,6 +85,8 @@ export class Enigma implements IValidatable {
    */
   #machine:Machine;
 
+  debug?:(Trace | Array<Trace>);
+
   /**
    * Creates a new Enigma kit.
    * 
@@ -128,11 +131,10 @@ export class Enigma implements IValidatable {
     this.cogDrive = !!model.cogDrive;
 
     // Instantiate the machine
-    const stator = model.stator ?? this.alphabet;
     this.#machine = new Machine(
       this.label,
       this.alphabet,
-      new Stator(this.label, stator.length, getWiring(this.alphabet, stator)),
+      Stator.fromModel(model),
     );
 
     // If only one UKW is available, just install it now.
@@ -232,7 +234,9 @@ export class Enigma implements IValidatable {
     if(char.length > 1)
       throw new Error(`Enigma.encode recieved a character longer than 1.`);
 
-    return this.#machine.processCharacter(char, unknownAs);
+    const [ out, trace ] = this.#machine.processCharacter(char, unknownAs);
+    this.debug = trace;
+    return out;
   }
 
   /**
@@ -247,7 +251,8 @@ export class Enigma implements IValidatable {
    * @returns Formatted cipher text
    */
   public encodeMessage(msg:string, subs:FormatSubstitutions = FormattingStandard, unknownAs = 'X'):string {
-    const cipher = this.#machine.processMessage(preFormatEncoding(msg, subs), unknownAs);
+    const [ cipher, traces ] = this.#machine.processMessage(preFormatEncoding(msg, subs), unknownAs);
+    this.debug = traces;
     return postFormatEncoding(cipher);
   }
 
@@ -263,7 +268,8 @@ export class Enigma implements IValidatable {
    * @returns Formatted plain-text
    */
   public decodeMessage(msg:string, subs:FormatSubstitutions = FormattingStandard, unknownAs = 'X'):string {
-    const plain = this.#machine.processMessage(preFormatDecoding(msg), unknownAs);
+    const [ plain, traces ] = this.#machine.processMessage(preFormatDecoding(msg), unknownAs);
+    this.debug = traces;
     return postFormatDecoding(plain, subs);
   }
 }

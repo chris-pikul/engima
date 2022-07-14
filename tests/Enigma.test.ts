@@ -11,15 +11,20 @@ describe('Enigma class', () => {
     mod.installWheel('II');
     mod.installWheel('III');
 
-    /*
     it('encodes an entire message correctly', () => {
       mod.reset();
 
-      const input = 'TestMessage';
+      const input = 'T';
       const expected = 'ZCLG JFTA YON';
 
-      expect(mod.encodeMessage(input)).to.equal(expected);
+      const result = mod.encodeMessage(input);
+
+      if(mod.debug) {
+        console.log(`Debug info for input "${input}"`);
+        console.log(JSON.stringify(mod.debug, undefined, 2 ));
+      } else throw new Error("No debug information available");
+
+      expect(result).to.equal(expected);
     });
-    */
   });
 });

@@ -2,6 +2,7 @@
 import { expect } from 'chai';
 import { AlphabetABC, AlphabetQWERTZ, getCharacterFromIndex, getCharacterIndex, getWiring } from '../../src/alphabet';
 import Stator from '../../src/components/Stator';
+import { ModelD } from '../../src/models';
 
 describe('Component - Stator', () => {
   const numChars = 10;
@@ -51,12 +52,12 @@ describe('Component - Stator', () => {
 
   describe('Stator functionality', () => {
     it('encodes single character correctly (Model D example)', () => {
-      const etw = new Stator('Test', AlphabetQWERTZ.length, getWiring(AlphabetQWERTZ));
+      const etw = Stator.fromModel(ModelD);
 
-      const ltr = getCharacterIndex('a');
+      const ltr = getCharacterIndex('T');
       const enc = etw.encode(ltr);
       const encChar = getCharacterFromIndex(enc);
-      expect(encChar, 'etw encode').to.equal('J');
+      expect(encChar, 'etw encode').to.equal('E');
     });
   });
 });

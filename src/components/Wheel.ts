@@ -21,7 +21,7 @@ import {
   findOutOfRanges,
 } from '../common';
 
-import { getCharacterIndex, getWiring } from '../alphabet';
+import { AlphabetABC, alphabetToIndices, getCharacterIndex } from '../alphabet';
 
 /**
  * Represents the Wheel, or "Rotor" of the Enigma machine.
@@ -62,10 +62,10 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
   public static fromModel(model:Model, wheel:ModelWheel):Wheel {
     return new Wheel(
       wheel.label,
-      model.alphabet.length,
+      wheel.wiring.length,
       wheel.display ?? model.alphabet.split(''),
-      getWiring(model.alphabet, wheel.wiring),
-      wheel.notches.map(char => getCharacterIndex(char, model.alphabet)),
+      alphabetToIndices(wheel.wiring, model.alphabet ?? AlphabetABC),
+      wheel.notches.map(char => getCharacterIndex(char)),
     );
   }
 
@@ -276,10 +276,11 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
    * as the displayed information is determined by the wheel model.
    * 
    * The physical description of wheels says that the visible character is
-   * actually 1 position ahead of the current position.
+   * actually 1 position ahead of the current position. But that doesn't work
+   * for how this simulation works. (cop out).
    */
   get visibleCharacter():string {
-    return this.ringDisplay[ circular(this.position + 1, this.numCharacters) ];
+    return this.ringDisplay[ this.position ];
   }
 
   /**
@@ -327,7 +328,7 @@ export class Wheel implements IEncodable, IRotatable, IValidatable {
    */
   public encode(index:number):number {
     // TODO: Throw warning if !init?
-    return this.wiring[circular(index + this.#position + this.#ringSetting, this.numCharacters)];
+    return this.wiring[circular((index + this.#position) + this.#ringSetting, this.numCharacters)];
   }
 
   /**

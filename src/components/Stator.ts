@@ -38,11 +38,11 @@ export class Stator implements IEncodable, IValidatable {
    * @returns New {@link Stator} object
    */
   public static fromModel(model:Model):Stator {
-    const alpha = model.stator ?? model.alphabet;
+    const alpha = model.stator ?? model.keyboard ?? model.alphabet;
     return new Stator(
       model.label,
       alpha.length,
-      getWiring(model.alphabet, alpha),
+      getWiring(alpha, model.alphabet),
     );
   }
 
@@ -101,7 +101,7 @@ export class Stator implements IEncodable, IValidatable {
 
     if(!map || !Array.isArray(map) || map.length !== numChars)
       throw new TypeError(`Stator constructed with parameter 3 "map" being empty, or not of length "${numChars}" as specified by "numChars".`);
-    this.mapping = map;
+    this.mapping = [ ...map ];
   }
 
   /**
