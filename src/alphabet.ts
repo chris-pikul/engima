@@ -93,47 +93,44 @@ export function getCharacterFromIndex(index:number, alpha = AlphabetABC, unknown
 }
 
 /**
- * Calculates the wiring needed for a given alphabet string. This is the
- * permutation result of applying the given "alpha" against the known ABC in
- * order to generate correct indices.
+ * Calculates the wiring needed for translating input characters into proper
+ * output characters using an mapping string supplied as `alpha`.
  * 
- * This means, given a character on the `parent` alphabet is entered, the indice
- * of this character is applied to the `alpha` alphabet and returned as a new
- * "translation".
+ * Wiring of components for models is defined as strings of unique characters.
+ * With the concept being that an input from the acceptable ASCII alphabet
+ * should "translate" (become a new character) for the next stage.
  * 
- * `parent` = A B C D E F G H I J
- * `alpha`  = G I A J B E H C F D
- * results  = 6 8 0 9 1 4 7 2 5 3
+ * Effectively the input `alpha` should result in indice-parity results against
+ * the `parent` alpha, in order to return a new wiring array.
  * 
- * A mechanism using this wire would take input "C", map that against the
- * `parent` alphabet resulting in indice "2". Applying indice 2 against the
- * results givens the value "0". Applied back against the `parent` alphabet this
- * becomes "A". Thus meaning, there is a parity between C becoming A.
+ * Example:
+ * `alpha`  = Q  W  E  R  T  Z
+ * `parent` = A  B  C  D  E  F
+ * result   = J  W  U  L  C  M
+ *          = 9  22 20 11 2 12
  * 
  * @param alpha Alphabet to map for wiring
+ * @param parent The master alphabet, usually just ABC...
  * @param unknownAs Fallback character for any missing characters
  * @returns Array of 0-based indices
  */
 export function getWiring(alpha:string, parent = AlphabetABC, unknownAs = 'X'):Array<number> {
-  const parentArr = parent.substring(0, alpha.length).split('');
+  if(alpha.length !== parent.length)
+    throw new Error(`getWiring() has mis-matched lengths on supplied alphabets`);
   
-  const unknownInd = parent.indexOf(unknownAs);
-  if(unknownInd === -1)
-    throw new Error(`could not find fallback character "${unknownAs}" in alphabet "${parent}"`);
+  const alphaArr = alpha.split('');
+  const parArr = parent.split('');
   
-  // Loop through parent array
-  return parentArr
-    .map((_, ind:number) => {
-      // Find the character at this index on the supplied alphabet
-      const mapsTo = alpha.charAt(ind);
+  const unkInd = parArr.indexOf(unknownAs);
+  if(unkInd === -1)
+    throw new Error(`getWiring() has invalid "unknownAs" parameter, not present in parent array`);
 
-      // Get the new index as it applies to the parent alphabet for return
-      const result = parentArr.indexOf(mapsTo);
-      
-      if(result === -1)
-        return unknownInd;
-      return result;
-    });
+  return parArr.map(char => {
+    const ind = alphaArr.indexOf(char);
+    if(ind === -1)
+      return unkInd;
+    return ind;
+  });
 }
 
 /**
@@ -148,13 +145,14 @@ export function getWiring(alpha:string, parent = AlphabetABC, unknownAs = 'X'):A
  * `parent` = A B C D E F G H I J
  * results  = G I A J B E H C F D
  * 
- * This is simply takes the indices and builds a unified string.
+ * This simply takes the indices and builds a unified string.
  * 
  * @param input Input wiring array of 0-based indices
  * @param alpha Alphabet to apply the wiring onto (ABC is default)
  * @returns String of the alphabet joined
  */
 export function wiringToAlphabet(input:Array<number>, alpha:string = AlphabetABC):string {
-  return input.map(ind => alpha.charAt(ind))
+  const alphaArr = alpha.split('');
+  return input.map(ind => alphaArr[ind])
     .join('');
 }

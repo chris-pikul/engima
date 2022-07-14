@@ -37,27 +37,16 @@ describe('Alphabet utilities', () => {
 
   describe('getWiring', () => {
     it('produces a 1-to-1 mapping on ABC', () => {
-      expect(getWiring('ABC')).to.eql([0, 1, 2]);
+      expect(getWiring('ABC', 'ABC', 'A')).to.eql([0, 1, 2]);
     });
 
     it('produces output indices for input CBA', () => {
-      expect(getWiring('CBA')).to.eql([2, 1, 0]);
+      expect(getWiring('CBA', 'ABC', 'A')).to.eql([2, 1, 0]);
     });
 
-    it('produces correct mapping for known 10-letter alpha', () => {
-      // This is mentally worked out and should be correct.
-      expect(getWiring('GIAJBEHCFD')).to.eql([
-        6,
-        8,
-        0,
-        9,
-        1,
-        4,
-        7,
-        2,
-        5,
-        3,
-      ]);
+    it('produces correct mapping for known results', () => {
+      const wire = getWiring(AlphabetQWERTZ);
+
     });
   });
 
@@ -66,11 +55,14 @@ describe('Alphabet utilities', () => {
       const wire = getWiring(AlphabetABC);
       expect(wiringToAlphabet(wire, AlphabetABC)).to.equal(AlphabetABC);
     });
+  });
 
-    it('maps correctly using an arbitrary alphabet', () => {
-      const alpha = 'LPGSZMHAEOQKVXRFYBUTNICJDW';
-      const wire = getWiring(alpha);
-      expect(wiringToAlphabet(wire)).to.equal(alpha);
+  describe('getWiring -> wiringToAlphabet', () => {
+    it('produces known results on QWERTZ', () => {
+      // results from Universal Enigma simulator
+      const expected = 'JWULCMNOHPQZYXIRADKEGVBTSF';
+      const wire = getWiring(AlphabetQWERTZ);
+      expect(wiringToAlphabet(wire)).to.equal(expected);
     });
   });
 });
